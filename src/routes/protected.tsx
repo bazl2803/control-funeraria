@@ -1,27 +1,15 @@
 import React from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-type Props = {};
+const user = true;
 
-export default function App({}: Props) {
-  return (
-    <React.Suspense>
-      <Outlet />
-    </React.Suspense>
-  );
+interface Props {
+  children: JSX.Element;
 }
 
-export const protectedRoutes = [
-  {
-    path: "/app",
-    element: <App />,
-    children: [
-      { path: "/clients", element: "Clients Page" },
-      { path: "/policies", element: "Policies Page" },
-      { path: "/services", element: "Services Page" },
-      { path: "/routes", element: "Routes Page" },
-      { path: "/settings", element: "Settings Page" },
-      { path: "*", element: <Navigate to="." /> },
-    ],
-  },
-];
+export const ProtectedRoute = ({ children }: Props) => {
+  if (!user) {
+    return <Navigate to={"/"} />;
+  }
+  return children;
+};

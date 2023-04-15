@@ -1,12 +1,17 @@
-import Landing from "@/features/misc/Landing";
-import { Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "./protected";
+import { Landing, Dashboard } from "@/features/misc";
 
-const user = true;
-
-export const AppRoutes = () => {
-  return (
-    <Routes>
-      <Route path="/" element={<Landing/>}/>
-    </Routes>
-  );
-};
+export const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Landing />} />
+    <Route
+      path="/app"
+      element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      }
+    />
+  </Routes>
+);

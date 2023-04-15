@@ -1,9 +1,8 @@
 import { Spin } from "antd";
-import Title from "antd/es/typography/Title";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Landing() {
+export const Landing = () => {
   const navigate = useNavigate();
 
   function handleStart() {
@@ -11,11 +10,9 @@ function Landing() {
     navigate("/app");
   }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     handleStart();
-  //   }, 5000);
-  // }, []);
+  useEffect(() => {
+    handleStart();
+  }, []);
 
   return (
     <div
@@ -24,13 +21,16 @@ function Landing() {
         flexDirection: "column",
         justifyItems: "center",
         alignItems: "center",
+        placeItems: "center",
         gap: "32px",
+        width: "100vw",
+        height: "100vh",
+        margin: 0,
+        minWidth: 320,
+        minHeight: "100vh",
       }}
     >
-      <img style={{ objectFit: "scale-down" }} src="logo.jpg" width={150} />
       <Spin />
     </div>
   );
-}
-
-export default Landing;
+};

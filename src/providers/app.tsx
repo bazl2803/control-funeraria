@@ -1,20 +1,24 @@
-import { SyncOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
 import React from "react";
-import { HashRouter as Router } from "react-router-dom";
+import {HashRouter as Router} from "react-router-dom";
+import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 
 interface Props {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }
 
-export function AppProvider({ children }: Props) {
-  return (
-    <React.Suspense
-      fallback={
-        <Spin indicator={<SyncOutlined style={{ fontSize: "24px" }} spin />} />
-      }
-    >
-      <Router>{children}</Router>
-    </React.Suspense>
-  );
+const darkTheme = createTheme({
+    palette: {
+        mode: "dark"
+    }
+})
+
+export function AppProvider({children}: Props) {
+    return (
+        <ThemeProvider theme={darkTheme}>
+            <CssBaseline/>
+            <React.Suspense>
+                <Router>{children}</Router>
+            </React.Suspense>
+        </ThemeProvider>
+    );
 }

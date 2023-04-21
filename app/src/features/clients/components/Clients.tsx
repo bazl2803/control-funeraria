@@ -1,8 +1,8 @@
+import React from "react";
+import { ClientsList } from "./ClientsList";
 import { Box } from "@mui/material";
-import { RouteTable } from "../components/RouteTable";
-import { RouteList } from "../components/RouteList";
 
-export const Routes = () => {
+export const Clients = () => {
   return (
     <Box
       sx={{
@@ -13,8 +13,7 @@ export const Routes = () => {
         height: "100vh",
       }}
     >
-      <RouteList />
-      <RouteTable clients={[]} />
+      <ClientsList />
     </Box>
   );
 };

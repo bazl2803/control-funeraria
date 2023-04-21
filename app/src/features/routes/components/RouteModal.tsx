@@ -12,35 +12,39 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { PrismaClient } from "@prisma/client";
+import axios from "axios";
 import React, { useState } from "react";
 
 interface Props extends DialogProps {
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export const RouteModal: React.FC<Props> = (props) => {
-  const [route, setRoute] = useState<{ name: string; location: string }>({
+  const { onClose } = props;
+  const [route, setRoute] = useState<{
+    name: string;
+    location: string;
+    payday: number;
+  }>({
     name: "",
-    location: "",
+    location: "Sonsonate",
+    payday: 1,
   });
 
   const handleSubmit = () => {
-    try {
-      const prisma = new PrismaClient();
-      prisma.route.create({
-        data: {
-          name: route?.name,
-          location: route?.location,
+    axios
+      .post("http://localhost:3000/api/routes", route, {
+        headers: {
+          "Content-Type": "application/json",
         },
-      });
-    } catch (error) {
-      console.error(error);
-    }
+      })
+      .then((response) => console.log(response.data))
+      .catch((error) => console.error(error))
+      .finally(() => onClose && onClose());
   };
 
   return (
-    <Dialog scroll="paper" {...props}>
+    <Dialog scroll="paper" maxWidth="xs" fullWidth {...props}>
       <DialogTitle>Nueva Ruta</DialogTitle>
       <DialogContent>
         <Stack spacing={4} padding={2}>
@@ -49,6 +53,7 @@ export const RouteModal: React.FC<Props> = (props) => {
             variant="standard"
             size="small"
             label="Nombre"
+            fullWidth
             onChange={(e) => setRoute({ ...route, name: e.target.value })}
           />
 
@@ -58,6 +63,7 @@ export const RouteModal: React.FC<Props> = (props) => {
               value={route.location}
               labelId="location_label"
               size="small"
+              fullWidth
               onChange={(e) => {
                 setRoute({ ...route, location: e.target.value });
               }}
@@ -69,10 +75,26 @@ export const RouteModal: React.FC<Props> = (props) => {
               <MenuItem value="Sonsonate">Sonsonate</MenuItem>
             </Select>
           </FormControl>
+          <TextField
+            value={route.payday}
+            label="Día de Cobro"
+            variant="standard"
+            fullWidth
+            type="number"
+            onChange={(e) =>
+              setRoute({ ...route, payday: parseInt(e.target.value) })
+            }
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+              min: "1",
+              max: "28",
+            }}
+          />
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => props.onClose()}>Cancel</Button>
+        <Button onClick={() => onClose && onClose()}>Cancel</Button>
         <Button variant="contained" onClick={handleSubmit}>
           Save
         </Button>

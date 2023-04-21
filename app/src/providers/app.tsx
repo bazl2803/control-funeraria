@@ -1,24 +1,34 @@
 import React from "react";
-import {HashRouter as Router} from "react-router-dom";
-import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import { HashRouter as Router } from "react-router-dom";
+import {
+  createTheme,
+  CssBaseline,
+  ThemeProvider,
+  useMediaQuery,
+} from "@mui/material";
 
 interface Props {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
-const darkTheme = createTheme({
-    palette: {
-        mode: "dark"
-    }
-})
+export function AppProvider({ children }: Props) {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 
-export function AppProvider({children}: Props) {
-    return (
-        <ThemeProvider theme={darkTheme}>
-            <CssBaseline/>
-            <React.Suspense>
-                <Router>{children}</Router>
-            </React.Suspense>
-        </ThemeProvider>
-    );
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? "dark" : "light",
+        },
+      }),
+    [prefersDarkMode]
+  );
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <React.Suspense>
+        <Router>{children}</Router>
+      </React.Suspense>
+    </ThemeProvider>
+  );
 }

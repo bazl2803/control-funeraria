@@ -1,17 +1,9 @@
 import React from "react";
-import { Box, Container, IconButton, Stack, Tooltip } from "@mui/material";
-import {
-  IconCoffin,
-  IconDashboard,
-  IconKey,
-  IconMap2,
-  IconUsers,
-} from "@tabler/icons-react";
+import { Box, IconButton, Stack, Tooltip } from "@mui/material";
+import { IconCoffin, IconDashboard, IconKey, IconMap2, IconUsers } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
-export const Layout: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
-  props
-) => {
+export const Layout: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
   const navigate = useNavigate();
   return (
     <Box
@@ -21,30 +13,31 @@ export const Layout: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
         height: "100%",
       }}
     >
-      <Stack spacing={2} padding={1} bgcolor={"#222"}>
+      <Stack spacing={2} padding={2} alignItems={"center"}>
+        <img style={{ objectFit: "scale-down" }} src="/logo.png" alt="logo" width={"32px"} />
         <Tooltip title={"Tablero"} placement={"right"}>
           <IconButton onClick={() => navigate("/app")}>
-            <IconDashboard color="white" />
+            <IconDashboard />
           </IconButton>
         </Tooltip>
         <Tooltip title={"Clientes"} placement={"right"}>
           <IconButton onClick={() => navigate("/clients")}>
-            <IconUsers color="white" />
+            <IconUsers />
           </IconButton>
         </Tooltip>
         <Tooltip title={"Rutas"} placement={"right"}>
           <IconButton onClick={() => navigate("/routes")}>
-            <IconMap2 color="white" />
+            <IconMap2 />
           </IconButton>
         </Tooltip>
         <Tooltip title={"Servicios"} placement={"right"}>
           <IconButton onClick={() => navigate("/servicies")}>
-            <IconCoffin color="white" />
+            <IconCoffin />
           </IconButton>
         </Tooltip>
         <Tooltip title={"Credenciales"} placement={"right"}>
           <IconButton onClick={() => navigate("/credentials")}>
-            <IconKey color="white" />
+            <IconKey />
           </IconButton>
         </Tooltip>
       </Stack>

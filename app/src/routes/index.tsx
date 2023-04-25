@@ -4,6 +4,7 @@ import { Dashboard, Landing } from "@/features/misc";
 import { Login } from "@/features/auth/components/Login";
 import { Routes as RoutesPage } from "@/features/routes";
 import { Clients as ClientsPage } from "@/features/clients";
+import { Services as ServicesPage } from "@/features/services";
 
 export const AppRoutes = () => (
   <Routes>
@@ -30,6 +31,14 @@ export const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <ClientsPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path={"/services"}
+      element={
+        <ProtectedRoute>
+          <ServicesPage />
         </ProtectedRoute>
       }
     />

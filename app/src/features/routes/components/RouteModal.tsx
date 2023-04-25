@@ -81,9 +81,7 @@ export const RouteModal: React.FC<Props> = (props) => {
             variant="standard"
             fullWidth
             type="number"
-            onChange={(e) =>
-              setRoute({ ...route, payday: parseInt(e.target.value) })
-            }
+            onChange={(e) => setRoute({ ...route, payday: parseInt(e.target.value) })}
             inputProps={{
               inputMode: "numeric",
               pattern: "[0-9]*",

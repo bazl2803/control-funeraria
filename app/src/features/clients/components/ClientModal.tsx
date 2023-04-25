@@ -256,7 +256,7 @@ export const ClientModal: React.FC<Props> = (props) => {
           </FormControl>
         </Stack>
 
-        <TextField variant="filled" label="Notas" size={"small"} multiline rows={2} />
+        <TextField variant="filled" label="Notas" size={"small"} multiline rows={3} />
       </Stack>
     </Box>
   );

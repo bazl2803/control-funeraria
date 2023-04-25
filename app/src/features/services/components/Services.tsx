@@ -1,11 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppBar, Box, Button, IconButton, InputBase, Paper, Stack, Toolbar } from "@mui/material";
-import { ClientsTable } from "./ClientsTable";
-import { ClientModal } from "./ClientModal";
+import { ServicesTable } from "./ServicesTable";
+import { ServiceDialog } from "./ServiceDialog";
 import { IconSearch } from "@tabler/icons-react";
+import axios from "axios";
+import { Service } from "../api/Service";
 
-export const Clients = () => {
+export const Services = () => {
   const [open, setOpen] = useState(false);
+
+  const [services, setServices] = useState<Service[]>([]);
+
+  async function getServices() {
+    try {
+      const response = await axios.get("http://localhost:3000/api/service");
+      setServices(response.data as Service[]);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getServices();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -33,8 +52,8 @@ export const Clients = () => {
         </Button>
       </Stack>
 
-      <ClientModal open={open} onClose={() => setOpen(false)} />
-      <ClientsTable />
+      <ServiceDialog open={open} onClose={() => setOpen(false)} />
+      <ServicesTable services={services} />
     </Box>
   );
 };

@@ -16,8 +16,14 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  const newData = service.create({
-    data: { ...req.body },
+  const { name, price, prime, fee } = req.body;
+  const newData = await service.create({
+    data: {
+      name,
+      price,
+      prime,
+      fee,
+    },
   });
 
   res.json(newData);

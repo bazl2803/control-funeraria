@@ -12,11 +12,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Client } from "../api/Client";
+import { Funeral } from "../api/Funeral";
 import React from "react";
 import { IconDotsVertical } from "@tabler/icons-react";
 
-export const ClientsTable = () => {
+export const FuneralsTable = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -28,12 +28,12 @@ export const ClientsTable = () => {
     setAnchorEl(null);
   };
 
-  const [clients, setClients] = useState<Client[]>();
+  const [Funerals, setFunerals] = useState<Funeral[]>();
 
-  async function getClients() {
+  async function getFunerals() {
     try {
-      const response = await axios.get("http://localhost:3000/api/clients");
-      setClients(response.data as Client[]);
+      const response = await axios.get("http://localhost:3000/api/Funerals");
+      setFunerals(response.data as Funeral[]);
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -41,7 +41,7 @@ export const ClientsTable = () => {
   }
 
   useEffect(() => {
-    getClients();
+    getFunerals();
   }, []);
 
   return (
@@ -51,21 +51,20 @@ export const ClientsTable = () => {
           <TableHead>
             <TableRow>
               <TableCell>Id</TableCell>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Teléfono</TableCell>
-              <TableCell>Estado</TableCell>
+              <TableCell>Fallecido</TableCell>
+              <TableCell>Fecha</TableCell>
+              <TableCell>Cementerio</TableCell>
               <TableCell>Dirección</TableCell>
               <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
-            {clients?.map((client) => (
+            {Funerals?.map((Funeral) => (
               <TableRow>
-                <TableCell>{client.id}</TableCell>
-                <TableCell>{client.name}</TableCell>
-                <TableCell>{client.phone_number}</TableCell>
-                <TableCell>{client.status}</TableCell>
-                <TableCell>{client.created_at.toLocaleDateString("es-SV")}</TableCell>
+                <TableCell>{Funeral.id}</TableCell>
+                <TableCell></TableCell>
+                <TableCell>{Funeral.burial_date.toLocaleDateString("es-SV")}</TableCell>
+                <TableCell>{Funeral.graveyard}</TableCell>
                 <TableCell>
                   <IconButton onClick={handleClick}>
                     <IconDotsVertical />

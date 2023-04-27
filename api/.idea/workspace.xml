@@ -2,7 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b5407080-5b29-4a11-a017-8a5d4d97d7f2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/routes/item.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/routes/item.routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/services.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/routes/services.routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/components/Layout/Layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/components/Layout/Layout.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../app/src/features/clients/components/ClientModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/features/clients/components/ClientModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/features/clients/components/Clients.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/features/clients/components/Clients.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/features/misc/components/Dashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/features/misc/components/Dashboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/features/services/components/ServiceDialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/features/services/components/ServiceDialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/features/services/components/Services.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/features/services/components/Services.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/features/services/components/ServicesTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/features/services/components/ServicesTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/src/routes/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../app/src/routes/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,16 +26,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -36,6 +45,7 @@
       <option name="presentableId" value="Default" />
       <updated>1682174061129</updated>
       <workItem from="1682174078898" duration="145000" />
+      <workItem from="1682625613382" duration="107000" />
     </task>
     <servers />
   </component>

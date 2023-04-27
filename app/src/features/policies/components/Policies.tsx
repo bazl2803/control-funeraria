@@ -1,12 +1,30 @@
-import {useState} from "react";
-import {AppBar, Box, Breadcrumbs, Button, Link, Stack, TextField, Typography} from "@mui/material";
-import {ClientsTable} from "./ClientsTable";
-import {ClientModal} from "./ClientModal";
+import {useEffect, useState} from "react";
+import {AppBar, Box, Breadcrumbs, Button, Link, Stack, TextField, Typography,} from "@mui/material";
+import {PolicyDialog} from "./PolicyDialog";
 import {IconChevronRight} from "@tabler/icons-react";
-import {ClientPolicies} from "@/features/clients/components/ClientPolicies";
+import axios from "axios";
+import {Policy} from "../api/Policy";
+import {PoliciesTable, PolicyPayments} from "@/features/policies";
 
-export const Clients = () => {
+export const Policies = () => {
     const [open, setOpen] = useState(false);
+
+    const [policies, setPolicies] = useState<Policy[]>([]);
+
+    async function getPolicies() {
+        try {
+            const response = await axios.get("http://localhost:3000/api/item");
+            setPolicies(response.data as Policy[]);
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        getPolicies();
+    }, []);
+
     return (
         <Box
             sx={{
@@ -26,18 +44,20 @@ export const Clients = () => {
                         backgroundColor: "white",
                     },
                 }}
-                position={"sticky"}>
-
-                <Stack sx={{flexGrow: 1, paddingX: "1.2rem", paddingY: "0.5rem"}}
-                       direction={"row"}
-                       spacing={4}
-                       justifyContent={"space-between"}
-                       alignItems={"center"}>
+                position="static"
+            >
+                <Stack
+                    sx={{flexGrow: 1, paddingX: "1.2rem", paddingY: "0.5rem"}}
+                    direction={"row"}
+                    spacing={4}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                >
                     <Breadcrumbs separator={<IconChevronRight size={"1rem"}/>}>
                         <Link underline="hover" color="inherit" href={"/app"}>
                             <Typography sx={{textDecoration: "none"}}>Home</Typography>
                         </Link>
-                        <Typography color="text.primary">Clientes</Typography>
+                        <Typography color="text.primary">Polizas</Typography>
                     </Breadcrumbs>
                     <TextField variant="filled" size="small" label="Buscar"/>
                     <Button onClick={() => setOpen(true)} variant="contained">
@@ -46,7 +66,13 @@ export const Clients = () => {
                 </Stack>
             </AppBar>
 
-            <ClientModal open={open} onClose={() => setOpen(false)}/>
+            <PolicyDialog
+                open={open}
+                onClose={() => {
+                    setOpen(false);
+                    getPolicies();
+                }}
+            />
 
             <Box sx={{
                 display: "grid",
@@ -54,8 +80,8 @@ export const Clients = () => {
                 gap: "1rem",
                 padding: "0 1rem 1rem 1rem",
             }}>
-                <ClientsTable/>
-                <ClientPolicies/>
+                <PoliciesTable/>
+                <PolicyPayments/>
             </Box>
         </Box>
     );

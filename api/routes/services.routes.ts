@@ -32,7 +32,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const updatedData = service.update({
+  const updatedData = await service.update({
     where: { id: parseInt(id) },
     data: { ...req.body },
   });

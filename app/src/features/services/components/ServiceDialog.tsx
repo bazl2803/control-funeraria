@@ -42,7 +42,7 @@ export const ServiceDialog: React.FC<Props> = (props) => {
 
   return (
     <Dialog scroll="paper" maxWidth="sm" fullWidth {...props}>
-      <DialogTitle>Nuevo Servicio</DialogTitle>
+      <DialogTitle my={"1rem"}>Nuevo Servicio</DialogTitle>
       <DialogContent>
         <Stack spacing={4}>
           <TextField
@@ -62,7 +62,7 @@ export const ServiceDialog: React.FC<Props> = (props) => {
                 type={"number"}
                 inputProps={{min: 1}}
                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                onChange={(e) => setService({ ...service, price: parseInt(e.target.value) })}
+                onChange={(e) => setService({ ...service, price: parseFloat(e.target.value) })}
               />
             </FormControl>
 
@@ -74,7 +74,7 @@ export const ServiceDialog: React.FC<Props> = (props) => {
                 type={"number"}
                 inputProps={{min: 1}}
                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
-                onChange={(e) => setService({ ...service, prime: parseInt(e.target.value) })}
+                onChange={(e) => setService({ ...service, prime: parseFloat(e.target.value) })}
               />
             </FormControl>
 
@@ -87,7 +87,7 @@ export const ServiceDialog: React.FC<Props> = (props) => {
                 inputProps={{min: 1}}
                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                 endAdornment={<InputAdornment position="start">/mensuales</InputAdornment>}
-                onChange={(e) => setService({ ...service, fee: parseInt(e.target.value) })}
+                onChange={(e) => setService({ ...service, fee: parseFloat(e.target.value) })}
               />
             </FormControl>
           </Stack>

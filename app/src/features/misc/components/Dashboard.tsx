@@ -32,7 +32,7 @@ export const Dashboard = () => {
     const navigate = useNavigate()
 
     return (
-        <Container maxWidth={"xl"}>
+        <Container sx={{height: "100vh"}} maxWidth={"xl"}>
             <Box px={2} py={4}>
                 <Typography variant={"h4"} component={"h3"}>
                     Bienvenido, Bryan

@@ -16,7 +16,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  const newData = item.create({
+  const newData = await item.create({
     data: { ...req.body },
   });
 
@@ -26,7 +26,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const updatedData = item.update({
+  const updatedData = await item.update({
     where: { id: parseInt(id) },
     data: { ...req.body },
   });

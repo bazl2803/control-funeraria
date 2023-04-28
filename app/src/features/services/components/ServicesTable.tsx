@@ -49,7 +49,7 @@ export const ServicesTable = ({services}: Props) => {
                     </TableHead>
                     <TableBody>
                         {services?.map((service) => (
-                            <TableRow hover={true}>
+                            <TableRow key={service.id} hover={true}>
                                 <TableCell>{service.id}</TableCell>
                                 <TableCell>{service.name}</TableCell>
                                 <TableCell align="right">{"$" + service.price}</TableCell>

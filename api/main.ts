@@ -17,8 +17,8 @@ app.use(express.json())
 app.use("/api/clients", clientRoutes);
 app.use("/api/policies", policyRoutes);
 app.use("/api/funerals", funeralRoutes);
-app.use("/api/item", itemRoutes);
-app.use("/api/service", serviceRoutes);
+app.use("/api/items", itemRoutes);
+app.use("/api/services", serviceRoutes);
 app.use("/api/routes", routesRoutes);
 
 app.listen(port, () => {

@@ -104,7 +104,12 @@ model policy {
   clientId  Int
   serviceId Int
   funeralId Int?
-  balance   Decimal   @db.Decimal(6, 2)
+  balance   Float?    @db.Money
+  date      DateTime? @db.Date
+  prime     Float?    @db.Money
+  notes     String?   @db.NVarChar(Max)
+  status    String?   @db.NVarChar(10)
+  modality  String?   @db.NVarChar(10)
   payment   payment[]
   client    client    @relation(fields: [clientId], references: [id], onUpdate: NoAction, map: "FK__policy__clientId__619B8048")
   funeral   funeral?  @relation(fields: [funeralId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__policy__funeralI__6383C8BA")

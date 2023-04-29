@@ -30,7 +30,7 @@ export const ServiceDialog: React.FC<Props> = (props) => {
 
   const handleSubmit = () => {
     axios
-      .post("http://localhost:3000/api/service", service, {
+      .post("http://localhost:3000/api/services", service, {
         headers: {
           "Content-Type": "application/json",
         },

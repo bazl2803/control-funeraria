@@ -1,12 +1,35 @@
-import {useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {AppBar, Box, Breadcrumbs, Button, Link, Stack, TextField, Typography} from "@mui/material";
 import {ClientsTable} from "./ClientsTable";
 import {ClientModal} from "./ClientModal";
 import {IconChevronRight} from "@tabler/icons-react";
 import {ClientPolicies} from "@/features/clients/components/ClientPolicies";
+import {Client} from "@/features/clients/api/Client";
+import axios from "axios";
 
 export const Clients = () => {
+    const [clients, setClients] = useState<Client[]>([]);
+    const [selectedClient, setSelectedClient] = useState<Client | null>(null);
     const [open, setOpen] = useState(false);
+
+    async function getClients() {
+        try {
+            const response = await axios.get("http://localhost:3000/api/clients");
+            setClients(response.data as Client[]);
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        getClients();
+    }, []);
+
+    const handleSelectClient = useCallback((client: Client) => {
+        setSelectedClient(client)
+    }, [])
+
     return (
         <Box
             sx={{
@@ -54,8 +77,8 @@ export const Clients = () => {
                 gap: "1rem",
                 padding: "0 1rem 1rem 1rem",
             }}>
-                <ClientsTable/>
-                <ClientPolicies/>
+                <ClientsTable onSelectClient={handleSelectClient} clients={clients}/>
+                {selectedClient?.id && <ClientPolicies clientId={selectedClient.id}/>}
             </Box>
         </Box>
     );

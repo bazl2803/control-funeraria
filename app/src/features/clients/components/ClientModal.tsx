@@ -57,7 +57,7 @@ export const ClientModal: React.FC<Props> = (props) => {
 
     async function getServices() {
         try {
-            const response = await axios.get("http://localhost:3000/api/service");
+            const response = await axios.get("http://localhost:3000/api/services");
             setServices(response.data as Service[]);
             console.log(response);
         } catch (error) {

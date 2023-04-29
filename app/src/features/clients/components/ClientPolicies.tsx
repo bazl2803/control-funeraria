@@ -2,8 +2,13 @@ import {Button, LinearProgress, List, ListItemButton, ListItemText, Paper, Stack
 import {PolicyDialog} from "@/features/policies";
 import {useState} from "react";
 import {IconCirclePlus} from "@tabler/icons-react";
+import {Client} from "@/features/clients/api/Client";
 
-export const ClientPolicies = () => {
+interface Props {
+    clientId: number
+}
+
+export const ClientPolicies = (props: Props) => {
     const [open, setOpen] = useState(false);
     return (
         <Paper sx={{padding: "1rem", width: "25rem"}} elevation={2}>
@@ -19,7 +24,7 @@ export const ClientPolicies = () => {
                 </ListItemButton>
             </List>
 
-            <PolicyDialog open={open} onClose={() => {
+            <PolicyDialog clientId={props.clientId} open={open} onClose={() => {
                 console.log("Obtener Polizas");
                 setOpen(false);
             }}/>

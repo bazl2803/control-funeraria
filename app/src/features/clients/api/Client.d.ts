@@ -5,13 +5,14 @@ export interface Client {
   doc_id: string;
   extension_day?: number;
   status: string;
-  route_id: number;
-  route_index: number;
+  address: string;
+  route_id?: number;
+  route_index?: number;
   method: string;
   phone_number: string;
   email: String;
   job: string;
-  incomes: string;
+  incomes: number;
   created_at: Date;
   modified_at?: Date;
 }

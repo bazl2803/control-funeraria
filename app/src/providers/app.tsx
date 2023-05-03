@@ -1,7 +1,10 @@
 import React from "react";
 import { HashRouter as Router } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider, useMediaQuery } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { QueryClientProvider, QueryClient } from "react-query";
+import 'dayjs/locale/es'
 
 interface Props {
   children: React.ReactNode;
@@ -26,7 +29,9 @@ export function AppProvider({ children }: Props) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <React.Suspense>
-          <Router>{children}</Router>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"es"}>
+            <Router>{children}</Router>
+          </LocalizationProvider>
         </React.Suspense>
       </ThemeProvider>
     </QueryClientProvider>

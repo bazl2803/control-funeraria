@@ -1,5 +1,5 @@
 export interface Route {
-  id?: number;
+  id: number;
   name: string;
   location: string;
   payday: number;

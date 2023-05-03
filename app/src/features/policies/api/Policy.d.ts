@@ -4,4 +4,9 @@ export interface Policy {
     serviceId: number,
     funeralId?: number,
     balance: number,
+    date?: Date,
+    prime?: number,
+    notes?: string,
+    status?: string,
+    modality?: string
 }

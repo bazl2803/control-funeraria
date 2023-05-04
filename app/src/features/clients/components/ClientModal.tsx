@@ -11,9 +11,7 @@ import {
   Stepper,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Service } from "@/features/services/api/Service";
-import { Route } from "@/features/routes/api/Route";
+import React, { useState } from "react";
 import { Client } from "../api/Client";
 import { ClientsModalOne } from "./ClientsModalOne";
 import { ClientsModalTwo } from "./ClientsModalTwo";
@@ -28,20 +26,19 @@ interface Props extends DialogProps {
 interface ClientContextState {
   client: Client;
   setClient: React.Dispatch<React.SetStateAction<Client>>;
-  policy: Policy;
-  setPolicy: React.Dispatch<React.SetStateAction<Policy>>;
+  policy: Omit<Policy, "clientId">;
+  setPolicy: React.Dispatch<React.SetStateAction<Omit<Policy, "clientId">>>;
 }
 
 export const ClientContext = React.createContext<ClientContextState>({} as ClientContextState);
 
 export const ClientModal: React.FC<Props> = (props) => {
   const CLIENT_INITIAL_STATE: Client = {
-    id: 0,
     name: "",
     type: "Persona",
     doc_id: "",
     incomes: 0,
-    status: "",
+    status: "Activo",
     address: "",
     extension_day: 0,
     method: "",
@@ -51,10 +48,12 @@ export const ClientModal: React.FC<Props> = (props) => {
     created_at: new Date(),
   };
 
-  const POLICY_INITIAL_STATE: Policy = {
-    balance: 0,
+  const POLICY_INITIAL_STATE: Omit<Policy, "clientId"> = {
     serviceId: 0,
-    clientId: 0,
+    balance: 0,
+    value: 0,
+    prime: 0,
+    fee: 0,
   };
 
   const { onClose } = props;
@@ -63,13 +62,16 @@ export const ClientModal: React.FC<Props> = (props) => {
   const [policy, setPolicy] = useState(POLICY_INITIAL_STATE);
 
   const handleSubmit = () => {
+    const data = { ...client, policy: { create: { ...policy } } };
     axios
-      .post("http://localhost:3000/api/clients", client, {
+      .post("http://localhost:3000/api/clients", data, {
         headers: {
           "Content-Type": "application/json",
         },
       })
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        console.log("Client response:", response);
+      })
       .catch((error) => console.error(error))
       .finally(() => onClose && onClose());
   };
@@ -77,22 +79,8 @@ export const ClientModal: React.FC<Props> = (props) => {
   const handleClose = () => {
     if (onClose) {
       onClose();
-      setClient({
-        name: "",
-        type: "Persona",
-        doc_id: "",
-        incomes: 0,
-        status: "",
-        address: "",
-        route_id: 0,
-        route_index: 0,
-        extension_day: 0,
-        method: "",
-        phone_number: "",
-        email: "",
-        job: "",
-        created_at: new Date(),
-      });
+      setClient(CLIENT_INITIAL_STATE);
+      setPolicy(POLICY_INITIAL_STATE);
       setActiveStep(0);
     }
   };
@@ -104,9 +92,9 @@ export const ClientModal: React.FC<Props> = (props) => {
       <DialogTitle mt={"1rem"}>Nuevo Cliente</DialogTitle>
       <DialogContent sx={{ padding: "1rem" }}>
         <Stepper sx={{ margin: "1rem 0rem 1rem 0.5rem" }} activeStep={activeStep}>
-          {steps.map((step) => {
+          {steps.map((step, index) => {
             return (
-              <Step>
+              <Step key={index}>
                 <StepLabel>{step}</StepLabel>
               </Step>
             );

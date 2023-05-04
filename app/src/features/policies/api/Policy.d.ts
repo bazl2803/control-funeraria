@@ -3,9 +3,11 @@ export interface Policy {
     clientId: number,
     serviceId: number,
     funeralId?: number,
-    balance: number,
     date?: Date,
-    prime?: number,
+    balance: number,
+    value: number,
+    fee: number,
+    prime: number,
     notes?: string,
     status?: string,
     modality?: string

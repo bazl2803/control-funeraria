@@ -11,12 +11,14 @@ import {
   Stack,
   Tab,
   Tabs,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { PolicyDialog } from "@/features/policies";
 import React, { useState } from "react";
-import { IconCheck, IconCirclePlus } from "@tabler/icons-react";
+import { IconCheck, IconCirclePlus, IconPrinter } from "@tabler/icons-react";
 import { Client } from "@/features/clients/api/Client";
+
 function PolicyListItem() {
   const [expanded, setExpanded] = useState(false);
 
@@ -25,17 +27,59 @@ function PolicyListItem() {
       <Stack sx={{ width: "100%" }} spacing={1}>
         <Stack>
           <ListItemText primary="Nº 000001" secondary="Fecha de Contrato: 26/12/2009" />
-          <LinearProgress variant="determinate" title="Saldo" value={88} />
+          <Typography variant="body2">Servicio:</Typography>
+          <Typography variant="body2" color={"GrayText"}>
+            Estándar Sencillo
+          </Typography>
+          <Typography variant="body2">Modalidad:</Typography>
+          <Typography variant="body2" color={"GrayText"}>
+            Pasivo
+          </Typography>
+          <LinearProgress
+            sx={{ mt: 1 }}
+            variant="determinate"
+            title="Estado de Cuenta"
+            value={50}
+          />
+          <Stack direction="row" justifyContent="space-between" my={0.5}>
+            <Tooltip title="Saldo" placement="top" followCursor>
+              <Typography variant="caption">$200.00</Typography>
+            </Tooltip>
+            <Tooltip title="Cuota" placement="top" followCursor>
+              <Typography variant="caption">$5.00/mes</Typography>
+            </Tooltip>
+            <Tooltip title="Valor" placement="top" followCursor>
+              <Typography variant="caption">$400.00</Typography>
+            </Tooltip>
+          </Stack>
         </Stack>
 
-        <Button onClick={() => setExpanded(!expanded)} startIcon={<IconCheck />} color="success">
+        <Button
+          sx={{ backgroundColor: "rgba(30,144,255,0.15)" }}
+          onClick={() => setExpanded(!expanded)}
+          startIcon={<IconPrinter />}
+          color="info"
+          disabled
+        >
+          Cancelación
+        </Button>
+        <Button
+          sx={{ backgroundColor: "rgba(75,181,67,0.15)" }}
+          onClick={() => setExpanded(!expanded)}
+          startIcon={<IconCheck />}
+          color="success"
+        >
           Entregado
         </Button>
         {/*Funerals List*/}
         <Collapse in={expanded}>
           <Paper sx={{ padding: "1rem", mb: 1 }}>
             <Stack spacing={0}>
-              <ListItemText primary="Entregado: 24/05/2014" />
+              <Typography variant="body2">Fecha: </Typography>
+              <Typography variant="body2" color={"GrayText"}>
+                24/04/2020
+              </Typography>
+
               <Typography variant="body2">Fallecido: </Typography>
               <Typography variant="body2" color={"GrayText"}>
                 María del Carmen Torres
@@ -82,15 +126,11 @@ export const ClientPolicies = () => {
         value={selectedTab}
         onChange={(_e, newValue) => setSelectedTab(newValue)}
       >
-        <Tab label="Detalle" />
-        <Tab label="Polizas" />
+        <Tab label="Detalle" value={0} />
+        <Tab label="Polizas" value={1} />
       </Tabs>
 
-      <Stack spacing={4}>
-        <List>
-          <PolicyListItem />
-        </List>
-      </Stack>
+      <Stack spacing={4}>{selectedTab === 1 && <List>{<PolicyListItem />}</List>}</Stack>
     </Paper>
   );
 };

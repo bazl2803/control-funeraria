@@ -1,44 +1,57 @@
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,} from "@mui/material";
-import React, {useCallback} from "react";
-import {Client} from "../api/Client";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import React from "react";
+import { Client } from "../api/Client";
+import dayjs from "dayjs";
 
 interface Props {
-    clients: Client[]
-    onSelectClient: (client: Client) => void
+  clients: Client[];
+  onSelectClient: (client: Client) => void;
 }
 
 export const ClientsTable = (props: Props) => {
-    const handleSelectClient = useCallback((client: Client) => {
-        props.onSelectClient(client)
-    }, [props.onSelectClient])
+  const handleSelectClient = React.useCallback(
+    (client: Client) => {
+      props.onSelectClient(client);
+    },
+    [props.onSelectClient]
+  );
 
-    return (
-        <Paper sx={{padding: "1rem"}}>
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Id</TableCell>
-                            <TableCell>Nombre</TableCell>
-                            <TableCell>Teléfono</TableCell>
-                            <TableCell>Estado</TableCell>
-                            <TableCell>Dirección</TableCell>
-                            <TableCell/>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {props.clients?.map((client) => (
-                            <TableRow key={client.id} onClick={() => handleSelectClient(client)}>
-                                <TableCell>{client.id}</TableCell>
-                                <TableCell>{client.name}</TableCell>
-                                <TableCell>{client.phone_number}</TableCell>
-                                <TableCell>{client.status}</TableCell>
-                                <TableCell>{client.created_at.toLocaleDateString("es-SV")}</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Paper>
-    );
+  return (
+    <Paper sx={{ padding: "1rem" }}>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Id</TableCell>
+              <TableCell>Nombre</TableCell>
+              <TableCell>Teléfono</TableCell>
+              <TableCell>Estado</TableCell>
+              <TableCell>Creado</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {props.clients?.map((client) => (
+              <TableRow key={client.id} hover onClick={() => handleSelectClient(client)}>
+                <TableCell>{client.id}</TableCell>
+                <TableCell>{client.name}</TableCell>
+                <TableCell>{client.phone_number}</TableCell>
+                <TableCell>{client.status}</TableCell>
+                <TableCell>
+                  {dayjs(client.created_at).locale("es").format("dddd DD MMMM YYYY")}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
+  );
 };

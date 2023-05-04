@@ -13,10 +13,9 @@ import React from "react";
 import { ClientContext } from "./ClientModal";
 import axios from "axios";
 import { Service } from "@/features/services/api/Service";
-import { Policies } from "@/features/policies";
 
 export const ClientsModalThree: React.FC = () => {
-  const { client, setClient, policy, setPolicy } = React.useContext(ClientContext);
+  const { policy, setPolicy } = React.useContext(ClientContext);
   const [services, setServices] = React.useState<Service[]>([]);
 
   async function getServices() {
@@ -47,14 +46,20 @@ export const ClientsModalThree: React.FC = () => {
 
         <FormControl variant="filled" size={"small"}>
           <InputLabel id="route_label">Servicio</InputLabel>
-          <Select labelId={"route_label"}>
+          <Select defaultValue="" labelId={"route_label"} displayEmpty>
+            <MenuItem disabled>Servicio</MenuItem>
             {services.map((service) => (
               <MenuItem
                 key={service.id}
                 value={service.id}
-                onClick={(e) => {
-                  setPolicy({ ...policy, serviceId: service.id, prime: service.prime });
-                  // TODO: Add cost, fee to policy.
+                onClick={() => {
+                  setPolicy({
+                    ...policy,
+                    serviceId: service.id,
+                    value: parseFloat(service.price.toString()),
+                    prime: parseFloat(service.prime.toString()),
+                    fee: parseFloat(service.fee.toString()),
+                  });
                 }}
               >
                 {service.name}
@@ -67,6 +72,10 @@ export const ClientsModalThree: React.FC = () => {
           <FormControl size="small" variant="filled" fullWidth>
             <InputLabel>Valor</InputLabel>
             <FilledInput
+              value={policy.value}
+              onChange={(e) =>
+                setPolicy({ ...policy, value: parseFloat(e.target.value.toString()) })
+              }
               size={"small"}
               type={"number"}
               startAdornment={<InputAdornment position="start">$</InputAdornment>}
@@ -76,6 +85,10 @@ export const ClientsModalThree: React.FC = () => {
           <FormControl size="small" variant="filled" fullWidth>
             <InputLabel>Prima</InputLabel>
             <FilledInput
+              value={policy.prime}
+              onChange={(e) =>
+                setPolicy({ ...policy, prime: parseFloat(e.target.value.toString()) })
+              }
               size={"small"}
               type={"number"}
               startAdornment={<InputAdornment position="start">$</InputAdornment>}
@@ -86,6 +99,8 @@ export const ClientsModalThree: React.FC = () => {
         <FormControl size="small" variant="filled" fullWidth>
           <InputLabel>Cuota</InputLabel>
           <FilledInput
+            value={policy.fee}
+            onChange={(e) => setPolicy({ ...policy, fee: parseFloat(e.target.value.toString()) })}
             size={"small"}
             type={"number"}
             startAdornment={<InputAdornment position="start">$</InputAdornment>}

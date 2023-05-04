@@ -103,8 +103,8 @@ export const ClientsModalTwo: React.FC = () => {
         <Stack direction={"row"} spacing={2}>
           <FormControl variant="filled" size={"small"} fullWidth>
             <InputLabel id="route_label">Ruta</InputLabel>
-            <Select labelId={"route_label"}>
-              <MenuItem defaultValue="" disabled />
+            <Select defaultValue="" labelId={"route_label"}>
+              <MenuItem key={-1} disabled />
               {routes.map((route) => (
                 <MenuItem
                   key={route.id}

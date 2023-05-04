@@ -73,14 +73,20 @@ export const Clients = () => {
             </Link>
             <Typography color="text.primary">Clientes</Typography>
           </Breadcrumbs>
-          <TextField variant="filled" size="small" label="Buscar" />
+          <TextField sx={{ width: "25rem" }} variant="filled" size="small" label="Buscar" />
           <Button onClick={() => setOpen(true)} variant="contained">
             Nuevo
           </Button>
         </Stack>
       </AppBar>
 
-      <ClientModal open={open} onClose={() => setOpen(false)} />
+      <ClientModal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          getClients();
+        }}
+      />
 
       <Box
         sx={{

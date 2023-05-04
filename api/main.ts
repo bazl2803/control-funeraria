@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express from "express";
 import cors from "cors";
 
 import clientRoutes from "./routes/client.routes";
@@ -8,11 +8,11 @@ import itemRoutes from "./routes/item.routes";
 import serviceRoutes from "./routes/services.routes";
 import routesRoutes from "./routes/routes.routes";
 
-const app: Express = express();
+const app = express();
 const port = 3000;
 
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 
 app.use("/api/clients", clientRoutes);
 app.use("/api/policies", policyRoutes);

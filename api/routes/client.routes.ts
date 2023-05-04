@@ -5,7 +5,11 @@ const { client } = new PrismaClient();
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  const data = await client.findMany();
+  const data = await client.findMany({
+    include: {
+      policy: true,
+    },
+  });
   res.json(data);
 });
 
@@ -16,8 +20,11 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  const newData = client.create({
+  const newData = await client.create({
     data: { ...req.body },
+    include: {
+      policy: true,
+    },
   });
 
   res.json(newData);

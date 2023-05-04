@@ -18,12 +18,13 @@ model client {
   incomes       Decimal?  @db.Decimal(18, 2)
   extension_day Int?
   status        String    @db.NVarChar(255)
-  route_id      Int
-  route_index   Int
+  route_id      Int?
+  route_index   Int?
   method        String    @db.NVarChar(255)
   phone_number  String?   @db.VarChar(20)
   email         String?   @db.NVarChar(255)
-  route         route     @relation(fields: [route_id], references: [id], onUpdate: NoAction, map: "FK__client__route_id__02FC7413")
+  address       String?   @db.NVarChar(Max)
+  route         route?    @relation(fields: [route_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__client__route_id__02FC7413")
   policy        policy[]
 }
 
@@ -54,12 +55,14 @@ model funeral {
   back_driverId                            Int
   back_buddyId                             Int?
   back_vehicleId                           Int
+  policyId                                 Int
   employee_funeral_back_buddyIdToemployee  employee?       @relation("funeral_back_buddyIdToemployee", fields: [back_buddyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__funeral__back_bu__59063A47")
   employee_funeral_back_driverIdToemployee employee        @relation("funeral_back_driverIdToemployee", fields: [back_driverId], references: [id], onUpdate: NoAction, map: "FK__funeral__back_dr__5812160E")
   vehicle_funeral_back_vehicleIdTovehicle  vehicle         @relation("funeral_back_vehicleIdTovehicle", fields: [back_vehicleId], references: [id], onUpdate: NoAction, map: "FK__funeral__back_ve__571DF1D5")
   employee_funeral_go_buddyIdToemployee    employee?       @relation("funeral_go_buddyIdToemployee", fields: [go_buddyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__funeral__go_budd__5629CD9C")
   employee_funeral_go_driverIdToemployee   employee        @relation("funeral_go_driverIdToemployee", fields: [go_driverId], references: [id], onUpdate: NoAction, map: "FK__funeral__go_driv__5535A963")
   vehicle_funeral_go_vehicleIdTovehicle    vehicle         @relation("funeral_go_vehicleIdTovehicle", fields: [go_vehicleId], references: [id], onUpdate: NoAction, map: "FK__funeral__go_vehi__5441852A")
+  policy_funeral_policyIdTopolicy          policy          @relation("funeral_policyIdTopolicy", fields: [policyId], references: [id], onUpdate: NoAction, map: "FK__funeral__policyI__2739D489")
   funeralDetail                            funeralDetail[]
   policy                                   policy[]
 }
@@ -100,20 +103,23 @@ model paymentMethod {
 }
 
 model policy {
-  id        Int       @id(map: "PK__policy__3213E83F65F3540F") @default(autoincrement())
-  clientId  Int
-  serviceId Int
-  funeralId Int?
-  balance   Float?    @db.Money
-  date      DateTime? @db.Date
-  prime     Float?    @db.Money
-  notes     String?   @db.NVarChar(Max)
-  status    String?   @db.NVarChar(10)
-  modality  String?   @db.NVarChar(10)
-  payment   payment[]
-  client    client    @relation(fields: [clientId], references: [id], onUpdate: NoAction, map: "FK__policy__clientId__619B8048")
-  funeral   funeral?  @relation(fields: [funeralId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__policy__funeralI__6383C8BA")
-  service   service   @relation(fields: [serviceId], references: [id], onUpdate: NoAction, map: "FK__policy__serviceI__628FA481")
+  id                               Int       @id(map: "PK__policy__3213E83F65F3540F") @default(autoincrement())
+  clientId                         Int
+  serviceId                        Int
+  funeralId                        Int?
+  balance                          Float     @db.SmallMoney
+  date                             DateTime? @db.Date
+  prime                            Float     @db.SmallMoney
+  notes                            String?   @db.NVarChar(Max)
+  status                           String?   @db.NVarChar(10)
+  modality                         String?   @db.NVarChar(10)
+  value                            Float     @db.SmallMoney
+  fee                              Float     @db.SmallMoney
+  funeral_funeral_policyIdTopolicy funeral[] @relation("funeral_policyIdTopolicy")
+  payment                          payment[]
+  client                           client    @relation(fields: [clientId], references: [id], onDelete: Cascade, map: "FK__policy__clientId__619B8048")
+  funeral                          funeral?  @relation(fields: [funeralId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__policy__funeralI__6383C8BA")
+  service                          service   @relation(fields: [serviceId], references: [id], onUpdate: NoAction, map: "FK__policy__serviceI__628FA481")
 }
 
 model role {
@@ -151,4 +157,14 @@ model vehicle {
   plate                                   String    @db.NVarChar(50)
   funeral_funeral_back_vehicleIdTovehicle funeral[] @relation("funeral_back_vehicleIdTovehicle")
   funeral_funeral_go_vehicleIdTovehicle   funeral[] @relation("funeral_go_vehicleIdTovehicle")
+}
+
+model sysdiagrams {
+  name         String @db.NVarChar(128)
+  principal_id Int
+  diagram_id   Int    @id(map: "PK__sysdiagr__C2B05B615D66FE3A") @default(autoincrement())
+  version      Int?
+  definition   Bytes?
+
+  @@unique([principal_id, name], map: "UK_principal_name")
 }

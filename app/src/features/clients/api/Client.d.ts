@@ -1,3 +1,5 @@
+import { Policy } from "@/features/policies/api/Policy";
+
 export interface Client {
   id?: number;
   created_at: Date;
@@ -15,4 +17,5 @@ export interface Client {
   phone_number?: string;
   email?: String;
   address?: string;
+  policy?: Policy[];
 }

@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { IconPlus } from "@tabler/icons-react";
+import dayjs from "dayjs";
 import { useForm, Controller } from "react-hook-form";
 
 interface Props extends DialogProps {
@@ -28,6 +29,7 @@ interface Props extends DialogProps {
 }
 
 export const PaymentsDialog = (props: Props) => {
+  // react-hook-form
   const {
     register,
     handleSubmit,
@@ -35,11 +37,14 @@ export const PaymentsDialog = (props: Props) => {
     reset,
     formState: { errors },
   } = useForm();
+
+  // onSubmit Function
   const onSubmit = (data: any) => {
     console.log(data);
     reset();
   };
 
+  // handleClose
   function handleClose(): void {
     if (props.onClose) {
       props.onClose();
@@ -57,9 +62,9 @@ export const PaymentsDialog = (props: Props) => {
               direction="row"
               justifyContent="space-between"
               alignItems="baseline"
+              component={Paper}
               spacing={2}
               p={2}
-              component={Paper}
             >
               <TextField
                 label="Número"
@@ -75,12 +80,14 @@ export const PaymentsDialog = (props: Props) => {
                 name="date"
                 rules={{ required: true }}
                 control={control}
-                defaultValue={null}
+                defaultValue={dayjs(new Date())}
                 render={({ field }) => (
                   <DatePicker
+                    {...field}
                     disableFuture
                     format="LL"
                     label="Fecha"
+                    onChange={(date) => field.onChange(date)}
                     slotProps={{
                       textField: {
                         variant: "filled",
@@ -90,8 +97,6 @@ export const PaymentsDialog = (props: Props) => {
                         helperText: errors.date ? "Requerido" : "",
                       },
                     }}
-                    {...field}
-                    onChange={(date) => field.onChange(date)}
                   />
                 )}
               />
@@ -109,6 +114,7 @@ export const PaymentsDialog = (props: Props) => {
                       size={"small"}
                       type={"number"}
                       onChange={(e) => field.onChange(e.target.value)}
+                      inputProps={{ min: 1 }}
                       startAdornment={<InputAdornment position="start">$</InputAdornment>}
                     />
                   </FormControl>

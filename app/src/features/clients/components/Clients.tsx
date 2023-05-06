@@ -12,9 +12,10 @@ import {
 import { ClientsTable } from "./ClientsTable";
 import { ClientModal } from "./ClientModal";
 import { IconChevronRight } from "@tabler/icons-react";
-import { ClientPolicies } from "@/features/clients/components/ClientPolicies";
+import { PoliciesList } from "@/features/clients/components/PoliciesList";
 import { Client } from "@/features/clients/api/Client";
 import axios from "axios";
+import { Policy } from "@/features/policies/api/Policy";
 
 export const Clients = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -98,7 +99,7 @@ export const Clients = () => {
         }}
       >
         <ClientsTable onSelectClient={handleSelectClient} clients={clients} />
-        <ClientPolicies />
+        {selectedClient?.policy && <PoliciesList policies={selectedClient?.policy} />}
       </Box>
     </Box>
   );

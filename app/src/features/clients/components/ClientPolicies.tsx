@@ -4,7 +4,6 @@ import {
   Collapse,
   LinearProgress,
   List,
-  ListItem,
   ListItemButton,
   ListItemText,
   Paper,
@@ -14,16 +13,15 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { PolicyDialog } from "@/features/policies";
 import React, { useState } from "react";
-import { IconCheck, IconCirclePlus, IconPrinter } from "@tabler/icons-react";
-import { Client } from "@/features/clients/api/Client";
+import { IconCheck, IconPrinter } from "@tabler/icons-react";
+import { PaymentsDialog } from "@/features/payments/components/PaymentsDialog";
 
-function PolicyListItem() {
+function PolicyListItem(props: React.HTMLAttributes<HTMLDivElement>) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <ListItemButton>
+    <ListItemButton onClick={(e) => props.onClick && props.onClick(e)}>
       <Stack sx={{ width: "100%" }} spacing={1}>
         <Stack>
           <ListItemText primary="Nº 000001" secondary="Fecha de Contrato: 26/12/2009" />
@@ -56,7 +54,6 @@ function PolicyListItem() {
 
         <Button
           sx={{ backgroundColor: "rgba(30,144,255,0.15)" }}
-          onClick={() => setExpanded(!expanded)}
           startIcon={<IconPrinter />}
           color="info"
           disabled
@@ -65,12 +62,16 @@ function PolicyListItem() {
         </Button>
         <Button
           sx={{ backgroundColor: "rgba(75,181,67,0.15)" }}
-          onClick={() => setExpanded(!expanded)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded(!expanded);
+          }}
           startIcon={<IconCheck />}
           color="success"
         >
           Entregado
         </Button>
+        
         {/*Funerals List*/}
         <Collapse in={expanded}>
           <Paper sx={{ padding: "1rem", mb: 1 }}>
@@ -114,23 +115,42 @@ function PolicyListItem() {
 }
 
 export const ClientPolicies = () => {
-  let clientId = 1;
   const [open, setOpen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(0);
-  const listItemId = React.useId;
 
   return (
-    <Paper sx={{ padding: "1rem", width: "25rem", backgroundColor: "Background" }} elevation={2}>
-      <Tabs
-        variant="fullWidth"
-        value={selectedTab}
-        onChange={(_e, newValue) => setSelectedTab(newValue)}
+    <Paper
+      sx={{ padding: "1rem", width: "20rem", backgroundColor: "Background", overflow: "hidden" }}
+      elevation={2}
+    >
+      <Box
+        sx={{
+          height: "100%",
+          overflow: "auto",
+          "::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}
       >
-        <Tab label="Detalle" value={0} />
-        <Tab label="Polizas" value={1} />
-      </Tabs>
+        <Tabs
+          variant="fullWidth"
+          value={selectedTab}
+          onChange={(_e, newValue) => setSelectedTab(newValue)}
+        >
+          <Tab label="Detalle" value={0} />
+          <Tab label="Polizas" value={1} />
+        </Tabs>
 
-      <Stack spacing={4}>{selectedTab === 1 && <List>{<PolicyListItem />}</List>}</Stack>
+        <PaymentsDialog
+          open={open}
+          onClose={() => {
+            setOpen(false);
+          }}
+        />
+        <Stack spacing={4}>
+          {selectedTab === 1 && <List>{<PolicyListItem onClick={() => setOpen(true)} />}</List>}
+        </Stack>
+      </Box>
     </Paper>
   );
 };

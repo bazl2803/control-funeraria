@@ -45,7 +45,7 @@ export const ClientsTable = (props: Props) => {
                 <TableCell>{client.phone_number}</TableCell>
                 <TableCell>{client.status}</TableCell>
                 <TableCell>
-                  {dayjs(client.created_at).locale("es").format("dddd DD MMMM YYYY")}
+                  {dayjs(client.created_at).locale("es").format("llll")}
                 </TableCell>
               </TableRow>
             ))}

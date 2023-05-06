@@ -37,6 +37,7 @@ export const ClientsModalThree: React.FC = () => {
       <Stack spacing={4} padding={2}>
         <DatePicker
           value={policy.date}
+          defaultValue={null}
           onChange={(value) => {
             value && setPolicy({ ...policy, date: value });
           }}

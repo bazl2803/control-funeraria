@@ -25,7 +25,6 @@ export const Clients = () => {
     try {
       const response = await axios.get("http://localhost:3000/api/clients");
       setClients(response.data as Client[]);
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -94,6 +93,8 @@ export const Clients = () => {
           gridTemplateColumns: "1fr auto",
           gap: "1rem",
           padding: "0 1rem 1rem 1rem",
+          height: "-webkit-fill-available",
+          overflowY: "auto",
         }}
       >
         <ClientsTable onSelectClient={handleSelectClient} clients={clients} />

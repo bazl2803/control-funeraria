@@ -5,7 +5,7 @@ const { policy } = new PrismaClient();
 const router = Router();
 
 router.get("/", async (_req: Request, res: Response) => {
-  const data = await policy.findMany();
+  const data = await policy.findMany({ include: { payment: true } });
   res.json(data);
 });
 
@@ -19,7 +19,6 @@ router.post("/", async (req: Request, res: Response) => {
   const newData = await policy.create({
     data: { ...req.body },
   });
-
   res.json(newData);
 });
 

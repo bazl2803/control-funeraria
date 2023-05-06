@@ -84,14 +84,14 @@ model item {
 }
 
 model payment {
-  id            Int           @id(map: "PK__payment__3213E83F8174EDD3") @default(autoincrement())
+  id            Int            @id(map: "PK__payment__3213E83F8174EDD3") @default(autoincrement())
   number        Int
-  date          DateTime      @db.Date
-  amount        Decimal       @db.Decimal(6, 2)
-  methodId      Int
+  date          DateTime       @db.Date
+  amount        Decimal        @db.Decimal(6, 2)
+  methodId      Int?
   policyId      Int
-  paymentMethod paymentMethod @relation(fields: [methodId], references: [id], onUpdate: NoAction, map: "FK__payment__methodI__693CA210")
-  policy        policy        @relation(fields: [policyId], references: [id], onUpdate: NoAction, map: "FK__payment__policyI__68487DD7")
+  paymentMethod paymentMethod? @relation(fields: [methodId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__payment__methodI__693CA210")
+  policy        policy         @relation(fields: [policyId], references: [id], onUpdate: NoAction, map: "FK__payment__policyI__68487DD7")
 }
 
 model paymentMethod {

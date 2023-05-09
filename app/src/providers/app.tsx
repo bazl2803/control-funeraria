@@ -3,7 +3,7 @@ import { HashRouter as Router } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider, useMediaQuery } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { QueryClientProvider, QueryClient } from "react-query";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import 'dayjs/locale/es'
 
 interface Props {

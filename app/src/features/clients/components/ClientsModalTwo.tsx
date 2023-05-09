@@ -15,7 +15,7 @@ import React from "react";
 import { ClientContext } from "./ClientModal";
 
 export const ClientsModalTwo: React.FC = () => {
-  const { client, setClient } = React.useContext(ClientContext);
+  const { client, setClient, policy, setPolicy } = React.useContext(ClientContext);
   const [routes, setRoutes] = React.useState<Array<Route>>([]);
 
   React.useEffect(() => {
@@ -67,25 +67,51 @@ export const ClientsModalTwo: React.FC = () => {
               onChange={(e) => setClient({ ...client, method: e.target.value })}
               defaultValue=""
             >
-              <MenuItem value="" disabled>
+              <MenuItem value={client.method} disabled>
                 Método de Pago
               </MenuItem>
-              <MenuItem value="Oficina">Oficina</MenuItem>
-              <MenuItem value="Ruta">Ruta</MenuItem>
-              <MenuItem value="Banco">Banco</MenuItem>
+              <MenuItem
+                value="Oficina"
+                onChange={() => setClient({ ...client, method: "Oficina" })}
+              >
+                Oficina
+              </MenuItem>
+              <MenuItem value="Ruta" onChange={() => setClient({ ...client, method: "Ruta" })}>
+                Ruta
+              </MenuItem>
+              <MenuItem value="Banco" onChange={() => setClient({ ...client, method: "Banco" })}>
+                Banco
+              </MenuItem>
             </Select>
           </FormControl>
 
           <FormControl variant="filled" size={"small"} fullWidth>
             <InputLabel id="route_label">Modalidad de Pago</InputLabel>
-            <Select defaultValue="" labelId={"route_label"}>
+            <Select value={policy.modality} defaultValue="" labelId={"route_label"}>
               <MenuItem value="" disabled>
                 Modalidad de Pago
               </MenuItem>
-              <MenuItem value="Pasivo">Pasivo</MenuItem>
-              <MenuItem value="Crédito">Crédito</MenuItem>
-              <MenuItem value="Contado">Contado</MenuItem>
-              <MenuItem value="Reservado">Reservado</MenuItem>
+              <MenuItem value="Pasivo" onClick={() => setPolicy({ ...policy, modality: "Pasivo" })}>
+                Pasivo
+              </MenuItem>
+              <MenuItem
+                value="Crédito"
+                onClick={() => setPolicy({ ...policy, modality: "Crédito" })}
+              >
+                Crédito
+              </MenuItem>
+              <MenuItem
+                value="Contado"
+                onClick={() => setPolicy({ ...policy, modality: "Contado" })}
+              >
+                Contado
+              </MenuItem>
+              <MenuItem
+                value="Reservado"
+                onClick={() => setPolicy({ ...policy, modality: "Reservado" })}
+              >
+                Reservado
+              </MenuItem>
             </Select>
           </FormControl>
         </Stack>

@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -12,23 +13,52 @@ import {
   InputLabel,
   Paper,
   Stack,
-  Table,
-  TableCell,
-  TableContainer,
-  TableHead,
   TextField,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { IconPlus } from "@tabler/icons-react";
-import dayjs from "dayjs";
+import { DataGrid, GridRowModel } from "@mui/x-data-grid";
+import { IconExclamationCircle, IconPlus } from "@tabler/icons-react";
 import { useForm, Controller } from "react-hook-form";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { Payment } from "../api/payment";
+import dayjs from "dayjs";
+import React from "react";
 
 interface Props extends DialogProps {
   onClose?: () => void;
+  policy_id: number;
 }
 
 export const PaymentsDialog = (props: Props) => {
+  const queryClient = new QueryClient();
+  const { isLoading, data, error, refetch } = useQuery(["payments"], () =>
+    axios.get("http://localhost:3000/api/payments").then((res) => res.data)
+  );
+
+  const editPayment = async (payment: Payment) => {
+    const { id, ...updateFields } = payment;
+    return await axios.put(`http://localhost:3000/api/payments/${id}`, updateFields);
+  };
+
+  const mutation = useMutation({
+    mutationFn: editPayment,
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(["payment", { id: variables.id }], data);
+    },
+  });
+
+  const processRowUpdate = (newRow: GridRowModel) => {
+    const updatedRow = { ...newRow };
+    mutation.mutateAsync(newRow as Payment).then(() => {
+      console.table(newRow);
+      refetch();
+    });
+    return updatedRow;
+  };
+
   // react-hook-form
   const {
     register,
@@ -39,9 +69,14 @@ export const PaymentsDialog = (props: Props) => {
   } = useForm();
 
   // onSubmit Function
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: any) => {
+    const paymentObj = { ...data, policyId: props.policy_id, status: 0 };
+    console.log(paymentObj);
+    await axios
+      .post("http://localhost:3000/api/payments/", paymentObj)
+      .then((response) => response.data);
     reset();
+    refetch();
   };
 
   // handleClose
@@ -52,11 +87,10 @@ export const PaymentsDialog = (props: Props) => {
   }
 
   return (
-    <Dialog {...props} maxWidth="md" scroll="body" fullWidth>
+    <Dialog {...props} scroll="body" maxWidth="md" fullWidth>
       <DialogTitle>Pagos</DialogTitle>
-
       <DialogContent>
-        <Stack spacing={2}>
+        <Box sx={{ display: "grid", gridTemplateRows: "auto 1fr", gap: 1 }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack
               direction="row"
@@ -80,7 +114,7 @@ export const PaymentsDialog = (props: Props) => {
                 name="date"
                 rules={{ required: true }}
                 control={control}
-                defaultValue={dayjs(new Date())}
+                defaultValue={null}
                 render={({ field }) => (
                   <DatePicker
                     {...field}
@@ -103,7 +137,7 @@ export const PaymentsDialog = (props: Props) => {
 
               <Controller
                 name="amount"
-                rules={{ required: true }}
+                rules={{ required: true, min: 1 }}
                 control={control}
                 defaultValue={1}
                 render={({ field }) => (
@@ -129,18 +163,41 @@ export const PaymentsDialog = (props: Props) => {
             </Stack>
           </form>
 
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableCell>Número</TableCell>
-                <TableCell>Fecha</TableCell>
-                <TableCell>Monto</TableCell>
-                <TableCell>Estado</TableCell>
-                <TableCell>Acciones</TableCell>
-              </TableHead>
-            </Table>
-          </TableContainer>
-        </Stack>
+          {!error && data ? (
+            <DataGrid
+              sx={{ height: 400, width: "100%" }}
+              columns={[
+                { field: "id", headerName: "Id" },
+                { field: "number", headerName: "Número", editable: true, width: 150 },
+                {
+                  field: "date",
+                  headerName: "Fecha",
+                  editable: true,
+                  valueFormatter: (params) => dayjs(params.value).locale("es").format("LL"),
+                  width: 150,
+                },
+                { field: "amount", headerName: "Monto", editable: true },
+              ]}
+              rows={data}
+              sortModel={[{ field: "date", sort: "desc" }]}
+              localeText={{ noRowsLabel: "Sin datos" }}
+              loading={isLoading}
+              processRowUpdate={processRowUpdate}
+              hideFooter
+            />
+          ) : (
+            <Stack
+              sx={{ bgcolor: "#ff6961" }}
+              direction="row"
+              alignItems="center"
+              p={2}
+              spacing={2}
+            >
+              <IconExclamationCircle size="1.5rem" />
+              <Typography>Fallo al Conectar</Typography>
+            </Stack>
+          )}
+        </Box>
       </DialogContent>
 
       <DialogActions sx={{ padding: "0 1.5rem 1rem" }}>

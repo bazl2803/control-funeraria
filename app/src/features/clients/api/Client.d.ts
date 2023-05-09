@@ -1,3 +1,4 @@
+import { Funeral } from "@/features/funerals/api/Funeral";
 import { Policy } from "@/features/policies/api/Policy";
 
 export interface Client {

@@ -1,18 +1,15 @@
-import React from "react";
-import { Box, List, Paper, Stack, Tab, Tabs } from "@mui/material";
+import { Box, List, Paper, Stack } from "@mui/material";
 import { PolicyListItem } from "./PolicyListItem";
 import { Policy } from "@/features/policies/api/Policy";
 
 interface Props {
-  policies: [];
+  policies: Policy[];
 }
 
-export const PoliciesList = () => {
-  const [selectedTab, setSelectedTab] = React.useState(0);
-
+export const PoliciesList = (props: Props) => {
   return (
     <Paper
-      sx={{ padding: "1rem", width: "20rem", backgroundColor: "Background", overflow: "hidden" }}
+      sx={{ padding: "1rem", width: "24em", backgroundColor: "Background", overflow: "hidden" }}
       elevation={2}
     >
       <Box
@@ -25,7 +22,11 @@ export const PoliciesList = () => {
         }}
       >
         <Stack spacing={4}>
-          <List>{<PolicyListItem policy={{} as Policy} />}</List>
+          <List>
+            {props.policies.map((policy) => (
+              <PolicyListItem key={policy.id} policyId={policy.id} />
+            ))}
+          </List>
         </Stack>
       </Box>
     </Paper>

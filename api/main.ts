@@ -7,6 +7,7 @@ import funeralRoutes from "./routes/funeral.routes";
 import itemRoutes from "./routes/item.routes";
 import serviceRoutes from "./routes/services.routes";
 import routesRoutes from "./routes/routes.routes";
+import paymentsRoutes from "./routes/payment.routes";
 
 const app = express();
 const port = 3000;
@@ -20,6 +21,7 @@ app.use("/api/funerals", funeralRoutes);
 app.use("/api/items", itemRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/routes", routesRoutes);
+app.use("/api/payments", paymentsRoutes);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

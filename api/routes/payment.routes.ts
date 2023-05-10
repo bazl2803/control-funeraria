@@ -1,36 +1,42 @@
 import { Router, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 
-const { policy } = new PrismaClient();
+const { payment } = new PrismaClient();
 const router = Router();
 
 router.get("/", async (_req: Request, res: Response) => {
-  const data = await policy.findMany({
-    include: { payment: true, funeral: true, service: true, client: true },
-  });
+  const data = await payment.findMany();
   res.json(data);
 });
 
 router.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const data = await policy.findUnique({
-    where: { id: parseInt(id) },
-    include: { payment: true, funeral: true, service: true },
-  });
+  const data = await payment.findUnique({ where: { id: parseInt(id) }, include: { policy: true } });
   res.json(data);
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  const newData = await policy.create({
+  const newData = await payment.create({
     data: { ...req.body },
   });
+
   res.json(newData);
+});
+
+router.delete("/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const updatedData = await payment.delete({
+    where: { id: parseInt(id) },
+  });
+
+  res.json(updatedData);
 });
 
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const updatedData = await policy.update({
+  const updatedData = await payment.update({
     where: { id: parseInt(id) },
     data: { ...req.body },
   });

@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   AppBar,
   Box,
@@ -15,7 +15,6 @@ import { IconChevronRight } from "@tabler/icons-react";
 import { PoliciesList } from "@/features/clients/components/PoliciesList";
 import { Client } from "@/features/clients/api/Client";
 import axios from "axios";
-import { Policy } from "@/features/policies/api/Policy";
 
 export const Clients = () => {
   const [clients, setClients] = useState<Client[]>([]);

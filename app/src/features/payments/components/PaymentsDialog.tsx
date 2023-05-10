@@ -18,14 +18,21 @@ import {
   Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { DataGrid, GridRowModel } from "@mui/x-data-grid";
-import { IconExclamationCircle, IconPlus } from "@tabler/icons-react";
+import { DataGrid, GridActionsCellItem, GridRowModel } from "@mui/x-data-grid";
+import {
+  IconArrowBackUp,
+  IconExclamationCircle,
+  IconPlus,
+  IconSquareForbid2,
+  IconTrash,
+} from "@tabler/icons-react";
 import { useForm, Controller } from "react-hook-form";
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Payment } from "../api/payment";
 import dayjs from "dayjs";
-import React from "react";
+import React, { useEffect } from "react";
+import { Policy } from "@/features/policies/api/Policy";
 
 interface Props extends DialogProps {
   onClose?: () => void;
@@ -33,16 +40,28 @@ interface Props extends DialogProps {
 }
 
 export const PaymentsDialog = (props: Props) => {
+  /**
+   * React Query
+   */
   const queryClient = new QueryClient();
-  const { isLoading, data, error, refetch } = useQuery(["payments"], () =>
-    axios.get("http://localhost:3000/api/payments").then((res) => res.data)
+
+  // get payments
+  const { isLoading, data, refetch } = useQuery(["payments"], () =>
+    axios.get("http://localhost:3000/api/payments").then((res) => {
+      const filteredPayments = (res.data as Payment[]).filter(
+        (pay) => pay.policyId == props.policy_id
+      );
+      return filteredPayments;
+    })
   );
 
+  // axios put payments function
   const editPayment = async (payment: Payment) => {
     const { id, ...updateFields } = payment;
     return await axios.put(`http://localhost:3000/api/payments/${id}`, updateFields);
   };
 
+  // edit payment react query mutation
   const mutation = useMutation({
     mutationFn: editPayment,
     onSuccess: (data, variables) => {
@@ -50,16 +69,18 @@ export const PaymentsDialog = (props: Props) => {
     },
   });
 
+  // Update DataGrid Row
   const processRowUpdate = (newRow: GridRowModel) => {
     const updatedRow = { ...newRow };
     mutation.mutateAsync(newRow as Payment).then(() => {
-      console.table(newRow);
       refetch();
     });
     return updatedRow;
   };
 
-  // react-hook-form
+  /**
+   * React Hook Form
+   */
   const {
     register,
     handleSubmit,
@@ -68,29 +89,49 @@ export const PaymentsDialog = (props: Props) => {
     formState: { errors },
   } = useForm();
 
-  // onSubmit Function
-  const onSubmit = async (data: any) => {
-    const paymentObj = { ...data, policyId: props.policy_id, status: 0 };
-    console.log(paymentObj);
-    await axios
-      .post("http://localhost:3000/api/payments/", paymentObj)
-      .then((response) => response.data);
+  /**
+   * Methods
+   */
+  // onSubmit
+  const onSubmit = async (dataForm: any) => {
+    const paymentObj = { ...dataForm, policyId: props.policy_id, status: true };
+    await axios.post("http://localhost:3000/api/payments/", paymentObj).then((response) => {
+      response.data;
+    });
     reset();
     refetch();
   };
 
   // handleClose
-  function handleClose(): void {
+  const handleClose = () => {
     if (props.onClose) {
       props.onClose();
     }
-  }
+  };
+
+  // setBalance
+  const setBalance = async (payments: Array<Payment>) => {
+    const payAmount = payments.reduce((accummulate, pay) => {
+      return accummulate + parseFloat(pay.amount.toString());
+    }, 0);
+
+    const policy = (await axios.get(`http://localhost:3000/api/policies/${props.policy_id}`))
+      .data as Policy;
+
+    await axios.put(`http://localhost:3000/api/policies/${props.policy_id}`, {
+      balance: policy.value - payAmount,
+    });
+  };
+
+  useEffect(() => {
+    setBalance(data as Payment[]);
+  }, [data]);
 
   return (
     <Dialog {...props} scroll="body" maxWidth="md" fullWidth>
       <DialogTitle>Pagos</DialogTitle>
       <DialogContent>
-        <Box sx={{ display: "grid", gridTemplateRows: "auto 1fr", gap: 1 }}>
+        <Box sx={{ display: "grid", gridTemplateRows: "auto 1fr", gap: 2 }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack
               direction="row"
@@ -163,26 +204,89 @@ export const PaymentsDialog = (props: Props) => {
             </Stack>
           </form>
 
-          {!error && data ? (
+          {data ? (
             <DataGrid
-              sx={{ height: 400, width: "100%" }}
               columns={[
                 { field: "id", headerName: "Id" },
-                { field: "number", headerName: "Número", editable: true, width: 150 },
+                {
+                  field: "number",
+                  headerName: "Factura",
+                  editable: true,
+                  width: 150,
+                  flex: 1,
+                  valueFormatter: (params) => params.value.padStart(8, 0),
+                },
                 {
                   field: "date",
                   headerName: "Fecha",
+                  type: "date",
                   editable: true,
-                  valueFormatter: (params) => dayjs(params.value).locale("es").format("LL"),
-                  width: 150,
+                  width: 200,
+                  flex: 1,
+                  valueFormatter: (params) => dayjs(params.value).locale("es-SV").format("ddd LL"),
                 },
-                { field: "amount", headerName: "Monto", editable: true },
+                {
+                  field: "status",
+                  headerName: "Estado",
+                  type: "boolean",
+                },
+                {
+                  field: "amount",
+                  headerName: "Monto",
+                  type: "number",
+                  editable: true,
+                  valueFormatter(params) {
+                    return new Intl.NumberFormat("es-SV", {
+                      style: "currency",
+                      currency: "USD",
+                    }).format(params.value);
+                  },
+                },
+                // ACTIONS
+                {
+                  field: "actions",
+                  type: "actions",
+                  align: "right",
+                  flex: 1,
+                  getActions: (params) => [
+                    <GridActionsCellItem
+                      icon={<IconSquareForbid2 />}
+                      label="Anular"
+                      title="Anular"
+                      onClick={() => {
+                        axios.put(`http://localhost:3000/api/payments/${params.id}`, {
+                          status: false,
+                        });
+                      }}
+                    />,
+                    <GridActionsCellItem
+                      icon={<IconArrowBackUp />}
+                      label="Revertir"
+                      title="Revertir"
+                      onClick={() =>
+                        axios
+                          .put(`http://localhost:3000/api/payments/${params.id}`, { status: true })
+                          .then(() => refetch())
+                      }
+                    />,
+                    <GridActionsCellItem
+                      icon={<IconTrash />}
+                      label="Eliminar"
+                      title="Eliminar"
+                      onClick={() =>
+                        axios
+                          .delete(`http://localhost:3000/api/payments/${params.id}`)
+                          .then(() => refetch())
+                      }
+                    />,
+                  ],
+                },
               ]}
               rows={data}
-              sortModel={[{ field: "date", sort: "desc" }]}
               localeText={{ noRowsLabel: "Sin datos" }}
-              loading={isLoading}
               processRowUpdate={processRowUpdate}
+              loading={isLoading}
+              autoHeight
               hideFooter
             />
           ) : (

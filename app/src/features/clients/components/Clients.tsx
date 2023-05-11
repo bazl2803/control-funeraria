@@ -87,7 +87,7 @@ export const Clients = () => {
         }}
       />
 
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" fixed>
         <ClientsTable onSelectClient={handleSelectClient} clients={clients} />
         {selectedClient?.policy && (
           <PoliciesList

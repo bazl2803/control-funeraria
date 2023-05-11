@@ -27,7 +27,7 @@ export const PoliciesList = ({ clientId, ...props }: Props) => {
 
   return (
     <Drawer variant="temporary" anchor="right" {...props}>
-      <Typography p={2}>Polizas</Typography>
+      <Typography variant="h6" px={3} py={1}>Polizas</Typography>
       <Stack height={"100%"} width={350}>
         {isLoading && <CircularProgress />}
 
@@ -39,7 +39,7 @@ export const PoliciesList = ({ clientId, ...props }: Props) => {
         )}
 
         {data && (
-          <List>
+          <List sx={{mx: 1}}>
             {data.map((policy) => (
               <PolicyListItem key={policy.id} policyId={policy.id} />
             ))}

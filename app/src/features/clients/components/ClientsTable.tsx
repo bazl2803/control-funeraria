@@ -1,8 +1,9 @@
 import React from "react";
 import { Client } from "../api/Client";
 import dayjs from "dayjs";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Paper } from "@mui/material";
+import { IconListDetails, IconReceipt, IconTrash } from "@tabler/icons-react";
 
 interface Props {
   clients: Client[];
@@ -27,7 +28,7 @@ export const ClientsTable = (props: Props) => {
         },
       }}
       hideFooter
-      onRowClick={(params) => handleSelectClient(params.row)}
+      autoHeight
       columns={[
         {
           field: "id",
@@ -46,12 +47,36 @@ export const ClientsTable = (props: Props) => {
           editable: true,
         },
         {
+          field: "address",
+          headerName: "Dirección",
+          editable: true,
+          flex: 1,
+        },
+        {
           field: "created_at",
           headerName: "Fecha",
           type: "date",
           editable: true,
           width: 200,
           valueFormatter: (params) => dayjs(params.value).locale("es-SV").format("ddd LL"),
+        },
+        {
+          field: "actions",
+          type: "actions",
+          getActions: (params) => [
+            <GridActionsCellItem
+              icon={<IconListDetails />}
+              label="Polizas"
+              title="Polizas"
+              onClick={() => handleSelectClient(params.row)}
+            />,
+            <GridActionsCellItem
+              icon={<IconTrash />}
+              label="Eliminar"
+              title="Eliminar"
+              //onClick={() => handleSelectClient(params.row)}
+            />,
+          ],
         },
       ]}
       rows={props.clients}

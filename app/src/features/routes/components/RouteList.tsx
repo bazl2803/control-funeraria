@@ -22,7 +22,6 @@ export const RouteList = () => {
     try {
       const response = await axios.get("http://localhost:3000/api/routes");
       setRoutes(response.data as Route[]);
-      console.log(response);
     } catch (error) {
       console.error(error);
     }

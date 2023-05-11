@@ -109,7 +109,7 @@ export const PaymentsDialog: React.FC<Props> = (props) => {
     }
   };
 
-  // setBalance
+  // Calculate Policy Balance
   const setBalance = async (payments: Array<Payment>) => {
     const payAmount = payments
       .filter((pay) => pay.status)
@@ -215,7 +215,6 @@ export const PaymentsDialog: React.FC<Props> = (props) => {
                   headerName: "Factura",
                   editable: true,
                   width: 150,
-                  flex: 1,
                   valueFormatter: (params) => params.value.padStart(8, 0),
                 },
                 {

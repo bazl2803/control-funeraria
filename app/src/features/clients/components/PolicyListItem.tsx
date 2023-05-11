@@ -27,10 +27,14 @@ export function PolicyListItem({ policyId }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [data, setData] = useState<Policy | null>(null);
 
-  useEffect(() => {
+  function fetchPolicy() {
     axios
       .get(`http://localhost:3000/api/policies/${policyId}`)
       .then((res) => setData(res.data as Policy));
+  }
+
+  useEffect(() => {
+    fetchPolicy();
   }, []);
 
   return (
@@ -38,7 +42,14 @@ export function PolicyListItem({ policyId }: Props) {
       {data && (
         <ListItem>
           {policyId && (
-            <PaymentsDialog open={open} onClose={() => setOpen(false)} policy_id={policyId} />
+            <PaymentsDialog
+              open={open}
+              onClose={() => {
+                fetchPolicy();
+                setOpen(false);
+              }}
+              policy_id={policyId}
+            />
           )}
 
           <Stack sx={{ width: "100%" }} spacing={1}>

@@ -4,6 +4,7 @@ import {
   Box,
   Breadcrumbs,
   Button,
+  Container,
   Link,
   Stack,
   TextField,
@@ -32,7 +33,7 @@ export const Clients = () => {
 
   useEffect(() => {
     getClients();
-  }, []);
+  }, [open]);
 
   const handleSelectClient = useCallback((client: Client) => {
     setSelectedClient(client);
@@ -83,23 +84,19 @@ export const Clients = () => {
         open={open}
         onClose={() => {
           setOpen(false);
-          getClients();
         }}
       />
 
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr auto",
-          gap: "1rem",
-          padding: "0 1rem 1rem 1rem",
-          height: "-webkit-fill-available",
-          overflowY: "auto",
-        }}
-      >
+      <Container maxWidth="xl">
         <ClientsTable onSelectClient={handleSelectClient} clients={clients} />
-        {selectedClient?.policy && <PoliciesList policies={selectedClient?.policy} />}
-      </Box>
+        {selectedClient?.policy && (
+          <PoliciesList
+            open={selectedClient ? true : false}
+            clientId={selectedClient.id ?? 0}
+            onClose={() => setSelectedClient(null)}
+          />
+        )}
+      </Container>
     </Box>
   );
 };

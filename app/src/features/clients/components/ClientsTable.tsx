@@ -1,15 +1,8 @@
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
 import React from "react";
 import { Client } from "../api/Client";
 import dayjs from "dayjs";
+import { DataGrid } from "@mui/x-data-grid";
+import { Paper } from "@mui/material";
 
 interface Props {
   clients: Client[];
@@ -25,33 +18,43 @@ export const ClientsTable = (props: Props) => {
   );
 
   return (
-    <Paper sx={{ padding: "1rem" }}>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Id</TableCell>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Teléfono</TableCell>
-              <TableCell>Estado</TableCell>
-              <TableCell>Creado</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {props.clients?.map((client) => (
-              <TableRow key={client.id} hover onClick={() => handleSelectClient(client)}>
-                <TableCell>{client.id}</TableCell>
-                <TableCell>{client.name}</TableCell>
-                <TableCell>{client.phone_number}</TableCell>
-                <TableCell>{client.status}</TableCell>
-                <TableCell>
-                  {dayjs(client.created_at).locale("es").format("L")}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+    <DataGrid
+      sx={{
+        border: "none",
+        padding: 1,
+        "@media(prefers-color-scheme: dark)": {
+          backgroundColor: "#222",
+        },
+      }}
+      hideFooter
+      onRowClick={(params) => handleSelectClient(params.row)}
+      columns={[
+        {
+          field: "id",
+          headerName: "Id",
+          editable: false,
+        },
+        {
+          field: "name",
+          headerName: "Nombre",
+          editable: true,
+          flex: 1,
+        },
+        {
+          field: "phone_number",
+          headerName: "Teléfono",
+          editable: true,
+        },
+        {
+          field: "created_at",
+          headerName: "Fecha",
+          type: "date",
+          editable: true,
+          width: 200,
+          valueFormatter: (params) => dayjs(params.value).locale("es-SV").format("ddd LL"),
+        },
+      ]}
+      rows={props.clients}
+    />
   );
 };

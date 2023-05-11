@@ -1,5 +1,3 @@
-import { PaymentsDialog } from "@/features/payments/components/PaymentsDialog";
-import { Policy } from "@/features/policies/api/Policy";
 import {
   ListItem,
   Stack,
@@ -10,48 +8,46 @@ import {
   Button,
   Collapse,
   Paper,
+  CircularProgress,
 } from "@mui/material";
+import { PaymentsDialog } from "@/features/payments/components/PaymentsDialog";
+import { Policy } from "@/features/policies/api/Policy";
 import { IconPrinter, IconCheck } from "@tabler/icons-react";
-import axios from "axios";
 import days from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   policyId: number;
 }
 
-export function PolicyListItem(props: Props) {
+export function PolicyListItem({ policyId }: Props) {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [data, setData] = useState<Policy | null>(null);
 
-  // fetch Policy
-  async function getPolicy(): Promise<Policy> {
-    const response = await axios.get(`http://localhost:3000/api/policies/${props.policyId}`);
-    return response.data;
-  }
-
-  // react query
-  const { isLoading, error, data } = useQuery<Policy, Error>({
-    queryKey: ["Policy"],
-    queryFn: getPolicy,
-  });
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/api/policies/${policyId}`)
+      .then((res) => setData(res.data as Policy));
+  }, []);
 
   return (
-    <ListItem>
-      {isLoading && "Loading..."}
-      {error && "Failed connection"}
+    <>
       {data && (
-        <>
-          <PaymentsDialog open={open} onClose={() => setOpen(false)} policy_id={props.policyId} />
+        <ListItem>
+          {policyId && (
+            <PaymentsDialog open={open} onClose={() => setOpen(false)} policy_id={policyId} />
+          )}
 
           <Stack sx={{ width: "100%" }} spacing={1}>
             <Stack>
-              <ListItemText primary={`Nº ${data?.id.toString().padStart(8, "0")}`} />
+              <ListItemText primary={`Nº ${policyId.toString().padStart(8, "0")}`} />
 
               <Typography variant="body2">Fecha de Contrato:</Typography>
               <Typography variant="body2" color={"GrayText"} mb={1}>
-                {days(data?.date).locale("es").format("LL")}
+                {days(data.date).locale("es").format("LL")}
               </Typography>
 
               <Typography variant="body2">Servicio:</Typography>
@@ -73,15 +69,15 @@ export function PolicyListItem(props: Props) {
 
               <Stack direction="row" justifyContent="space-between" my={0.5}>
                 <Tooltip title="Saldo" placement="top" followCursor>
-                  <Typography variant="caption">${data?.balance.toFixed(2)}</Typography>
+                  <Typography variant="caption">${data.balance.toFixed(2)}</Typography>
                 </Tooltip>
 
                 <Tooltip title="Cuota" placement="top" followCursor>
-                  <Typography variant="caption">${data?.fee.toFixed(2)}/mes</Typography>
+                  <Typography variant="caption">${data.fee.toFixed(2)}/mes</Typography>
                 </Tooltip>
 
                 <Tooltip title="Valor" placement="top" followCursor>
-                  <Typography variant="caption">${data?.value.toFixed(2)}</Typography>
+                  <Typography variant="caption">${data.value.toFixed(2)}</Typography>
                 </Tooltip>
               </Stack>
             </Stack>
@@ -154,8 +150,8 @@ export function PolicyListItem(props: Props) {
               <Button color="success">Entregar Servicio</Button>
             )}
           </Stack>
-        </>
+        </ListItem>
       )}
-    </ListItem>
+    </>
   );
 }

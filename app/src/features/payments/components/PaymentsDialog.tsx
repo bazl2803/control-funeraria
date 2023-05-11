@@ -39,7 +39,7 @@ interface Props extends DialogProps {
   policy_id: number;
 }
 
-export const PaymentsDialog = (props: Props) => {
+export const PaymentsDialog: React.FC<Props> = (props) => {
   /**
    * React Query
    */
@@ -111,9 +111,11 @@ export const PaymentsDialog = (props: Props) => {
 
   // setBalance
   const setBalance = async (payments: Array<Payment>) => {
-    const payAmount = payments.reduce((accummulate, pay) => {
-      return accummulate + parseFloat(pay.amount.toString());
-    }, 0);
+    const payAmount = payments
+      .filter((pay) => pay.status)
+      .reduce((accummulate, pay) => {
+        return accummulate + parseFloat(pay.amount.toString());
+      }, 0);
 
     const policy = (await axios.get(`http://localhost:3000/api/policies/${props.policy_id}`))
       .data as Policy;
@@ -254,9 +256,11 @@ export const PaymentsDialog = (props: Props) => {
                       label="Anular"
                       title="Anular"
                       onClick={() => {
-                        axios.put(`http://localhost:3000/api/payments/${params.id}`, {
-                          status: false,
-                        });
+                        axios
+                          .put(`http://localhost:3000/api/payments/${params.id}`, {
+                            status: false,
+                          })
+                          .then(() => refetch());
                       }}
                     />,
                     <GridActionsCellItem

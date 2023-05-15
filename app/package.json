@@ -2,7 +2,7 @@
   "name": "control-funeraria",
   "version": "2.2.1",
   "main": "dist-electron/main/index.js",
-  "build": "Control de Funeraria",
+  "build": "Funebre",
   "description": "Gestor de Clientes, Servicios y Polizas de Funararia",
   "author": "草鞋没号 <308487730@qq.com>",
   "license": "MIT",

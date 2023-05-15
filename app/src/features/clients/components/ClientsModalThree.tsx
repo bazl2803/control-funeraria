@@ -7,6 +7,7 @@ import {
   FilledInput,
   InputAdornment,
   MenuItem,
+  TextField,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import React from "react";
@@ -108,6 +109,16 @@ export const ClientsModalThree: React.FC = () => {
             endAdornment={<InputAdornment position="start">/mensuales</InputAdornment>}
           />
         </FormControl>
+
+        {/* <TextField
+          value={policy.notes}
+          onChange={(e) => setPolicy({ ...policy, notes: policy.notes })}
+          variant="filled"
+          label="Notas"
+          size={"small"}
+          multiline
+          rows={3}
+        /> */}
       </Stack>
     </Box>
   );

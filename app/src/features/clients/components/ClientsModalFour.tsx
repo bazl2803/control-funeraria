@@ -11,7 +11,7 @@ import {
 import { ClientContext } from "./ClientModal";
 
 export const ClientsModalFour = () => {
-  const { client, setClient, policy, setPolicy } = React.useContext(ClientContext);
+  const { policy, setPolicy } = React.useContext(ClientContext);
   return (
     <Box>
       <Stack spacing={4} padding={2}>

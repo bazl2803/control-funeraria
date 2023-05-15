@@ -48,7 +48,7 @@ export const ClientModal: React.FC<Props> = (props) => {
     created_at: new Date(),
   };
 
-  const POLICY_INITIAL_STATE: Omit<Policy, "clientId"> = {
+  const POLICY_INITIAL_STATE: Omit<Policy, "clientId" | "id"> = {
     serviceId: 0,
     balance: 0,
     value: 0,
@@ -85,7 +85,7 @@ export const ClientModal: React.FC<Props> = (props) => {
     }
   };
 
-  const steps = ["Datos del Cliente", "Forma de Pago", "Tipo de Servicio", "Estado del Servicio"];
+  const steps = ["Datos del Cliente", "Forma de Pago", "Tipo de Servicio"];
 
   return (
     <Dialog scroll="body" maxWidth="sm" fullWidth {...props}>
@@ -105,7 +105,6 @@ export const ClientModal: React.FC<Props> = (props) => {
           {activeStep === 0 && <ClientsModalOne />}
           {activeStep === 1 && <ClientsModalTwo />}
           {activeStep === 2 && <ClientsModalThree />}
-          {activeStep === 3 && <ClientsModalFour />}
         </ClientContext.Provider>
       </DialogContent>
       <DialogActions sx={{ margin: "1.5rem" }}>

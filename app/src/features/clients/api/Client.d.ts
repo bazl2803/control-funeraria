@@ -12,7 +12,7 @@ export interface Client {
   incomes?: number;
   extension_day?: number;
   status: string;
-  route_id?: number;
+  routeId?: number;
   route_index?: number;
   method: string;
   phone_number?: string;

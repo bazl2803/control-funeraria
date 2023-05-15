@@ -1,17 +1,20 @@
 import {
+  Button,
   CircularProgress,
   Drawer,
   DrawerProps,
+  Icon,
+  IconButton,
   List,
   Stack,
-  SwipeableDrawer,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { PolicyListItem } from "./PolicyListItem";
 import { Policy } from "@/features/policies/api/Policy";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { IconExclamationCircle } from "@tabler/icons-react";
+import { IconExclamationCircle, IconPlus } from "@tabler/icons-react";
 
 interface Props extends DrawerProps {
   clientId: number;
@@ -20,14 +23,29 @@ interface Props extends DrawerProps {
 export const PoliciesList = ({ clientId, ...props }: Props) => {
   const { isLoading, data, error } = useQuery<Policy[], Error>(["client_policies"], () =>
     axios.get("http://localhost:3000/api/policies").then((res) => {
-      console.log(res.data);
       return (res.data as Policy[]).filter((p) => p.clientId == clientId);
     })
   );
 
   return (
-    <Drawer variant="temporary" anchor="right" {...props}>
-      <Typography variant="h6" px={3} py={1}>Polizas</Typography>
+    <Drawer anchor="right" {...props}>
+      <Stack
+        flexDirection={"row"}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+        mx={4}
+        mt={3}
+        mb={2}
+      >
+        <Typography variant="h5" fontWeight="600">
+          Polizas
+        </Typography>
+        <Tooltip title="Nueva Poliza">
+          <IconButton>
+            <IconPlus />
+          </IconButton>
+        </Tooltip>
+      </Stack>
       <Stack height={"100%"} width={350}>
         {isLoading && <CircularProgress />}
 
@@ -39,7 +57,7 @@ export const PoliciesList = ({ clientId, ...props }: Props) => {
         )}
 
         {data && (
-          <List sx={{mx: 1}}>
+          <List sx={{ mx: 2 }}>
             {data.map((policy) => (
               <PolicyListItem key={policy.id} policyId={policy.id} />
             ))}

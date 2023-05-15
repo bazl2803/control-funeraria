@@ -1,16 +1,24 @@
 import React from "react";
-import { Client } from "../api/Client";
-import dayjs from "dayjs";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { IconListDetails, IconMapPin, IconPlus, IconTrash } from "@tabler/icons-react";
+import { Fab, Tooltip, Typography } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import { Paper } from "@mui/material";
-import { IconListDetails, IconReceipt, IconTrash } from "@tabler/icons-react";
+import dayjs from "dayjs";
+import { ClientModal } from "./ClientModal";
+import { Client } from "../api/Client";
 
 interface Props {
-  clients: Client[];
   onSelectClient: (client: Client) => void;
 }
 
 export const ClientsTable = (props: Props) => {
+  const [open, setOpen] = React.useState(false);
+
+  const { data, error, isLoading, refetch } = useQuery<Client[], Error>(["clients"], () =>
+    axios.get("http://localhost:3000/api/clients").then((res) => res.data)
+  );
+
   const handleSelectClient = React.useCallback(
     (client: Client) => {
       props.onSelectClient(client);
@@ -19,67 +27,85 @@ export const ClientsTable = (props: Props) => {
   );
 
   return (
-    <DataGrid
-      sx={{
-        border: "none",
-        padding: 1,
-        "@media(prefers-color-scheme: dark)": {
-          backgroundColor: "#222",
-        },
-      }}
-      hideFooter
-      autoHeight
-      columns={[
-        {
-          field: "id",
-          headerName: "Id",
-          editable: false,
-        },
-        {
-          field: "name",
-          headerName: "Nombre",
-          editable: true,
-          flex: 1,
-        },
-        {
-          field: "phone_number",
-          headerName: "Teléfono",
-          editable: true,
-        },
-        {
-          field: "address",
-          headerName: "Dirección",
-          editable: true,
-          flex: 1,
-        },
-        {
-          field: "created_at",
-          headerName: "Fecha",
-          type: "date",
-          editable: true,
-          width: 200,
-          valueFormatter: (params) => dayjs(params.value).locale("es-SV").format("ddd LL"),
-        },
-        {
-          field: "actions",
-          type: "actions",
-          getActions: (params) => [
-            <GridActionsCellItem
-              icon={<IconListDetails />}
-              label="Polizas"
-              title="Polizas"
-              onClick={() => handleSelectClient(params.row)}
-            />,
-            <GridActionsCellItem
-              icon={<IconTrash />}
-              label="Eliminar"
-              title="Eliminar"
-              //onClick={() => handleSelectClient(params.row)}
-            />,
-          ],
-        },
-      ]}
-      rows={props.clients}
-    />
+    <>
+      <ClientModal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          refetch();
+        }}
+      />
+
+      <Tooltip title="Nuevo Cliente">
+        <Fab sx={{ position: "fixed", bottom: 8, right: 8 }} onClick={() => setOpen(true)}>
+          <IconPlus />
+        </Fab>
+      </Tooltip>
+
+      {error && <Typography color={"red"}>Error</Typography>}
+
+      {data && (
+        <DataGrid
+          sx={{
+            border: "none",
+            padding: 1,
+            height: "97vh",
+            width: "-webkit-fill-available",
+            "@media(prefers-color-scheme: dark)": {
+              backgroundColor: "#222",
+            },
+          }}
+          columns={[
+            {
+              field: "id",
+              headerName: "Id",
+              editable: false,
+            },
+            {
+              field: "name",
+              headerName: "Nombre",
+              editable: true,
+              flex: 1,
+            },
+            {
+              field: "phone_number",
+              headerName: "Teléfono",
+              editable: true,
+            },
+            {
+              field: "address",
+              headerName: "Dirección",
+              editable: true,
+              flex: 1,
+            },
+            {
+              field: "created_at",
+              headerName: "Creación",
+              type: "date",
+              editable: false,
+              valueFormatter: (params) => dayjs(params.value).locale("es-SV").format("ddd LL"),
+            },
+            {
+              field: "actions",
+              type: "actions",
+              align: "right",
+              getActions: (params) => [
+                <GridActionsCellItem
+                  icon={<IconTrash />}
+                  label="Eliminar"
+                  title="Eliminar"
+                  onClick={() => axios.delete(`http://localhost:3000/api/clients/${params.id}`)}
+                />,
+              ],
+            },
+          ]}
+          rows={data}
+          loading={isLoading}
+          onRowClick={(params) => handleSelectClient(params.row)}
+          autoPageSize
+          pagination
+        />
+      )}
+    </>
   );
 };

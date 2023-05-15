@@ -16,55 +16,7 @@ export const AppRoutes = () => (
             path="/app"
             element={
                 <ProtectedRoute>
-                    <Dashboard/>
-                </ProtectedRoute>
-            }
-        />
-        <Route
-            path={"/routes"}
-            element={
-                <ProtectedRoute>
-                    <RoutesPage/>
-                </ProtectedRoute>
-            }
-        />
-        <Route
-            path={"/clients"}
-            element={
-                <ProtectedRoute>
                     <ClientsPage/>
-                </ProtectedRoute>
-            }
-        />
-        <Route
-            path={"/services"}
-            element={
-                <ProtectedRoute>
-                    <ServicesPage/>
-                </ProtectedRoute>
-            }
-        />
-        <Route
-            path={"/items"}
-            element={
-                <ProtectedRoute>
-                    <ItemsPage/>
-                </ProtectedRoute>
-            }
-        />
-        <Route
-            path={"/policies"}
-            element={
-                <ProtectedRoute>
-                    <PoliciesPage/>
-                </ProtectedRoute>
-            }
-        />
-        <Route
-            path={"/credentials"}
-            element={
-                <ProtectedRoute>
-                    <>Credentials</>
                 </ProtectedRoute>
             }
         />

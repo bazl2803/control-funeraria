@@ -15,7 +15,7 @@ export interface Policy {
   notes?: string;
   status?: string;
   modality?: string;
-  payment: Payment[];
-  service: Service;
-  funeral: Funeral;
+  payment?: Payment[];
+  service?: Service;
+  funeral?: Funeral;
 }

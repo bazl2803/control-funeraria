@@ -28,11 +28,11 @@ export const FuneralsTable = () => {
     setAnchorEl(null);
   };
 
-  const [Funerals, setFunerals] = useState<Funeral[]>();
+  const [funerals, setFunerals] = useState<Funeral[]>();
 
   async function getFunerals() {
     try {
-      const response = await axios.get("http://localhost:3000/api/Funerals");
+      const response = await axios.get("http://localhost:3000/api/funerals");
       setFunerals(response.data as Funeral[]);
       console.log(response);
     } catch (error) {
@@ -59,12 +59,12 @@ export const FuneralsTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Funerals?.map((Funeral) => (
+            {funerals?.map((funeral) => (
               <TableRow>
-                <TableCell>{Funeral.id}</TableCell>
+                <TableCell>{funeral.id}</TableCell>
                 <TableCell></TableCell>
-                <TableCell>{Funeral.burial_date.toLocaleDateString("es-SV")}</TableCell>
-                <TableCell>{Funeral.graveyard}</TableCell>
+                <TableCell>{funeral.burial_date.toLocaleDateString("es-SV")}</TableCell>
+                <TableCell>{funeral.graveyard}</TableCell>
                 <TableCell>
                   <IconButton onClick={handleClick}>
                     <IconDotsVertical />

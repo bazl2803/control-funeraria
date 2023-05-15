@@ -70,14 +70,14 @@ export const ClientsModalTwo: React.FC = () => {
               <MenuItem value={client.method} disabled>
                 Método de Pago
               </MenuItem>
+              <MenuItem value="Ruta" onChange={() => setClient({ ...client, method: "Ruta" })}>
+                Ruta
+              </MenuItem>
               <MenuItem
                 value="Oficina"
                 onChange={() => setClient({ ...client, method: "Oficina" })}
               >
                 Oficina
-              </MenuItem>
-              <MenuItem value="Ruta" onChange={() => setClient({ ...client, method: "Ruta" })}>
-                Ruta
               </MenuItem>
               <MenuItem value="Banco" onChange={() => setClient({ ...client, method: "Banco" })}>
                 Banco
@@ -136,7 +136,7 @@ export const ClientsModalTwo: React.FC = () => {
                   key={route.id}
                   value={route.id}
                   onClick={(e) => {
-                    setClient({ ...client, route_id: route.id, extension_day: route.payday });
+                    setClient({ ...client, routeId: route.id, extension_day: route.payday });
                   }}
                 >
                   {route.name}

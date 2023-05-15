@@ -111,7 +111,7 @@ export const PaymentsDialog: React.FC<Props> = (props) => {
 
   // Calculate Policy Balance
   const setBalance = async (payments: Array<Payment>) => {
-    const payAmount = payments
+    const payAmount: number = payments
       .filter((pay) => pay.status)
       .reduce((accummulate, pay) => {
         return accummulate + parseFloat(pay.amount.toString());
@@ -126,7 +126,11 @@ export const PaymentsDialog: React.FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    setBalance(data as Payment[]);
+    let paymentsArray: Payment[] = [];
+    if (data) {
+      paymentsArray = data as Payment[];
+    }
+    setBalance(paymentsArray);
   }, [data]);
 
   return (

@@ -1,39 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
-import {
-  AppBar,
-  Box,
-  Breadcrumbs,
-  Button,
-  Container,
-  Link,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { useCallback, useState } from "react";
+import { Box, Container, IconButton, Paper, Stack, Tooltip } from "@mui/material";
 import { ClientsTable } from "./ClientsTable";
-import { ClientModal } from "./ClientModal";
-import { IconChevronRight } from "@tabler/icons-react";
 import { PoliciesList } from "@/features/clients/components/PoliciesList";
 import { Client } from "@/features/clients/api/Client";
-import axios from "axios";
+import { IconAddressBook, IconMap2, IconNotes, IconReceipt2 } from "@tabler/icons-react";
 
 export const Clients = () => {
-  const [clients, setClients] = useState<Client[]>([]);
+  const [policyDrawerOpen, setPolicyDrawerOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-  const [open, setOpen] = useState(false);
-
-  async function getClients() {
-    try {
-      const response = await axios.get("http://localhost:3000/api/clients");
-      setClients(response.data as Client[]);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  useEffect(() => {
-    getClients();
-  }, [open]);
 
   const handleSelectClient = useCallback((client: Client) => {
     setSelectedClient(client);
@@ -43,60 +17,55 @@ export const Clients = () => {
     <Box
       sx={{
         display: "grid",
-        gridTemplateRows: "auto 1fr",
-        height: "100vh",
-        gap: 2,
+        gridTemplateColumns: "1fr auto",
         overflowY: "auto",
-        "::-webkit-scrollbar": {
-          display: "none",
-        },
       }}
     >
-      <AppBar
-        sx={{
-          "@media(prefers-color-scheme: light)": {
-            backgroundColor: "white",
-          },
-        }}
-        position={"sticky"}
-      >
-        <Stack
-          sx={{ flexGrow: 1, paddingX: "1.2rem", paddingY: "0.5rem" }}
-          direction={"row"}
-          spacing={4}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <Breadcrumbs separator={<IconChevronRight size={"1rem"} />}>
-            <Link underline="hover" color="inherit" href={"/app"}>
-              <Typography sx={{ textDecoration: "none" }}>Home</Typography>
-            </Link>
-            <Typography color="text.primary">Clientes</Typography>
-          </Breadcrumbs>
-          <TextField sx={{ width: "25rem" }} variant="filled" size="small" label="Buscar" />
-          <Button onClick={() => setOpen(true)} variant="contained">
-            Nuevo
-          </Button>
-        </Stack>
-      </AppBar>
-
-      <ClientModal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      />
-
-      <Container maxWidth="xl" fixed>
-        <ClientsTable onSelectClient={handleSelectClient} clients={clients} />
+      <Container sx={{ mt: 1.8 }} maxWidth="xl" fixed>
+        <ClientsTable onSelectClient={handleSelectClient} />
         {selectedClient?.policy && (
           <PoliciesList
-            open={selectedClient ? true : false}
+            open={policyDrawerOpen}
             clientId={selectedClient.id ?? 0}
-            onClose={() => setSelectedClient(null)}
+            onClose={() => {
+              setPolicyDrawerOpen(false);
+              setSelectedClient(null);
+            }}
           />
         )}
       </Container>
+
+      <Box sx={{ gridColumn: 2, overflowY: "hidden" }}>
+        <Paper sx={{ zIndex: 1101, height: "100vh" }} elevation={3}>
+          <Stack spacing={2} padding={2} alignItems={"center"}>
+            <Tooltip title={"Polizas"} placement={"right"}>
+              <IconButton
+                disabled={selectedClient == null}
+                onClick={() => {
+                  setPolicyDrawerOpen(true);
+                }}
+              >
+                <IconReceipt2 />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={"Rutas"} placement={"right"}>
+              <IconButton disabled>
+                <IconMap2 />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={"Direcciones"} placement={"right"}>
+              <IconButton>
+                <IconAddressBook />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={"Notas"} placement={"right"}>
+              <IconButton>
+                <IconNotes />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+        </Paper>
+      </Box>
     </Box>
   );
 };

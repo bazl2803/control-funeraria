@@ -9,13 +9,30 @@ import {
   ListItemButton,
   ListItemText,
   CircularProgress,
+  Box,
+  Grid,
+  IconButton,
 } from "@mui/material";
 import { PaymentsDialog } from "@/features/payments/components/PaymentsDialog";
 import { Policy } from "@/features/policies/api/Policy";
-import { IconPrinter, IconCheck } from "@tabler/icons-react";
+import {
+  IconPrinter,
+  IconCheck,
+  IconCoffin,
+  IconPaperclip,
+  IconTableOptions,
+  IconApps,
+  IconCalendar,
+  IconPlus,
+  IconPencil,
+  IconClockDown,
+  IconClockCode,
+} from "@tabler/icons-react";
 import days from "dayjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { IconAccessibleOffFilled } from "@tabler/icons-react";
+import { IconActivity } from "@tabler/icons-react";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   policyId: number;
@@ -72,35 +89,43 @@ export function PolicyListItem({ policyId }: Props) {
 
           <ListItemButton onClick={() => setOpenDetails(!openDetails)}>
             <Stack sx={{ width: "100%" }} spacing={1} py={1}>
-              <ListItemText
-                primary={`#${policyId.toString().padStart(8, "0")}`}
-                color={"CaptionText"}
-              />
+              <Grid alignItems={"start"} container>
+                <Grid item xs>
+                  <Typography variant="h5" component="div">
+                    {"#" + policyId.toString().padStart(8, "0")}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Tooltip title="Editar">
+                    <IconButton>
+                      <IconPencil size={"1rem"} />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+              </Grid>
 
-              <Stack>
-                {data.balance > 0 ? (
-                  <>
-                    <LinearProgress
-                      variant="determinate"
-                      title="Estado de Cuenta"
-                      value={progressValue(data.value, data.balance)}
-                    />
+              <Stack spacing={1} paddingTop={1}>
+                <LinearProgress
+                  variant="determinate"
+                  title="Estado de Cuenta"
+                  value={progressValue(data.value, data.balance)}
+                />
 
-                    <Stack direction="row" justifyContent="space-between" my={0.5}>
-                      <Tooltip title="Saldo" placement="top" followCursor>
-                        <Typography variant="caption">${data.balance.toFixed(2)}</Typography>
-                      </Tooltip>
+                <Stack direction="row" justifyContent="space-between" my={0.5}>
+                  <Tooltip title="Saldo" placement="top" followCursor>
+                    <Typography variant="caption">${data.balance.toFixed(2)}</Typography>
+                  </Tooltip>
 
-                      <Tooltip title="Cuota" placement="top" followCursor>
-                        <Typography variant="caption">${data.fee.toFixed(2)}/mes</Typography>
-                      </Tooltip>
+                  <Tooltip title="Cuota" placement="top" followCursor>
+                    <Typography variant="caption">${data.fee.toFixed(2)}/mes</Typography>
+                  </Tooltip>
 
-                      <Tooltip title="Valor" placement="top" followCursor>
-                        <Typography variant="caption">${data.value.toFixed(2)}</Typography>
-                      </Tooltip>
-                    </Stack>
-                  </>
-                ) : (
+                  <Tooltip title="Valor" placement="top" followCursor>
+                    <Typography variant="caption">${data.value.toFixed(2)}</Typography>
+                  </Tooltip>
+                </Stack>
+
+                {data.balance == 0 && (
                   <Button sx={{ backgroundColor: "rgba(0,0,0,0.15)" }} startIcon={<IconPrinter />}>
                     Cancelación
                   </Button>
@@ -108,50 +133,69 @@ export function PolicyListItem({ policyId }: Props) {
               </Stack>
 
               <Collapse in={openDetails}>
-                <Stack spacing={1}>
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td>Fecha:</td>
-                        <td>
-                          <Typography color={"GrayText"} ml={2}>
-                            {data.date && formatDate(data.date.toString())}
-                          </Typography>
-                        </td>
-                      </tr>
-                      {data.service?.name && (
-                        <tr>
-                          <td>Servicio:</td>
-                          <td>
-                            <Typography color={"GrayText"} ml={2}>
-                              {data.service?.name}
-                            </Typography>
-                          </td>
-                        </tr>
-                      )}
-                      {data.modality && (
-                        <tr>
-                          <td>Modalidad:</td>
-                          <td>
-                            <Typography color={"GrayText"} ml={2}>
-                              {data.modality}
-                            </Typography>
-                          </td>
-                        </tr>
-                      )}
-                      {data.notes && (
-                        <tr>
-                          <td>Notas:</td>
-                          <td>
-                            <Typography color={"GrayText"} ml={2}>
-                              {data.notes}
-                            </Typography>
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: "auto 1fr",
+                    gridAutoRows: "auto",
+                    alignItems: "center",
+                    alignContent: "center",
+                    paddingY: 3,
+                    columnGap: 5,
+                    rowGap: 2,
+                  }}
+                >
+                  {data.service?.name && (
+                    <>
+                      <Stack direction="row" alignItems="center" spacing={1}>
+                        <IconCoffin size={"1rem"} color={"GrayText"} />
+                        <Typography fontWeight={600} color={"GrayText"}>
+                          Servicio
+                        </Typography>
+                      </Stack>
+                      <div>{data.service?.name}</div>
+                    </>
+                  )}
 
+                  {data.date && (
+                    <>
+                      <Stack direction="row" alignItems="center" spacing={1}>
+                        <IconCalendar size={"1rem"} color={"GrayText"} />
+                        <Typography fontWeight={600} color={"GrayText"}>
+                          Contrato{" "}
+                        </Typography>
+                      </Stack>
+                      <div>{days(new Date(data.date)).format("LL")}</div>
+                    </>
+                  )}
+
+                  {data.modality && (
+                    <>
+                      <Stack direction="row" alignItems="center" spacing={1}>
+                        <IconClockCode size={"1rem"} color={"GrayText"} />
+                        <Typography fontWeight={600} color={"GrayText"}>
+                          Modalidad
+                        </Typography>
+                      </Stack>
+                      <div>{data.modality}</div>
+                    </>
+                  )}
+
+                  {data.status && (
+                    <>
+                      <Stack direction="row" alignItems="center" spacing={1}>
+                        <IconCheck size={"1rem"} color={"GrayText"} />
+                        <Typography fontWeight={600} color={"GrayText"}>
+                          Estado
+                        </Typography>
+                      </Stack>
+
+                      <div>{data.status}</div>
+                    </>
+                  )}
+                </Box>
+
+                <Stack spacing={1}>
                   {/* Buttons */}
                   <Button
                     sx={{ backgroundColor: "rgba(0,0,0,0.15)" }}

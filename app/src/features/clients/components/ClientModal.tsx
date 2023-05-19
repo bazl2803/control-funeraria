@@ -38,7 +38,7 @@ export const ClientModal: React.FC<Props> = (props) => {
     type: "Persona",
     doc_id: "",
     incomes: 0,
-    status: "Activo",
+    status: true,
     address: "",
     extension_day: 0,
     method: "",

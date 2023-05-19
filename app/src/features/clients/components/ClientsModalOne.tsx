@@ -7,9 +7,14 @@ import {
   FormControlLabel,
   Radio,
   TextField,
+  Input,
+  InputLabel,
+  FilledInput,
 } from "@mui/material";
 import { useContext } from "react";
 import { ClientContext } from "./ClientModal";
+import { PhoneMask } from "@/components/PhoneMask/PhoneMask";
+import { DocumentMask } from "@/components/DocumentMask/DocumentMask";
 
 export const ClientsModalOne: React.FC = () => {
   const { client, setClient } = useContext(ClientContext);
@@ -34,14 +39,17 @@ export const ClientsModalOne: React.FC = () => {
             </RadioGroup>
           </FormControl>
 
-          <TextField
-            value={client.doc_id}
-            onChange={(e) => setClient({ ...client, doc_id: e.target.value })}
-            variant="filled"
-            label="Documento de identidad"
-            size="small"
-            fullWidth
-          />
+          <FormControl variant="filled" fullWidth>
+            <InputLabel htmlFor="DUI">DUI</InputLabel>
+            <FilledInput
+              value={client.doc_id}
+              onChange={(e) => setClient({ ...client, doc_id: e.target.value })}
+              name="doc_id"
+              size="small"
+              id="DUI"
+              inputComponent={DocumentMask as any}
+            />
+          </FormControl>
         </Stack>
 
         <TextField
@@ -51,15 +59,19 @@ export const ClientsModalOne: React.FC = () => {
           label="Nombre"
           size="small"
         />
-        
-        <TextField
-          value={client.phone_number}
-          onChange={(e) => setClient({ ...client, phone_number: e.target.value })}
-          variant="filled"
-          label="Teléfono"
-          type="tel"
-          size="small"
-        />
+
+        <FormControl variant="filled">
+          <InputLabel htmlFor="formatted-text-mask-input">Teléfono</InputLabel>
+          <FilledInput
+            value={client.phone_number}
+            onChange={(e) => setClient({ ...client, phone_number: e.target.value })}
+            name="phone_number"
+            type="tel"
+            size="small"
+            id="formatted-text-mask-input"
+            inputComponent={PhoneMask as any}
+          />
+        </FormControl>
 
         <TextField
           value={client.email}

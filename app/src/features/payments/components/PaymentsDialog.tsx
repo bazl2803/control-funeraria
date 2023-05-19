@@ -167,8 +167,12 @@ export const PaymentsDialog: React.FC<Props> = (props) => {
                     {...field}
                     disableFuture
                     format="LL"
+                    view="month"
                     label="Fecha"
-                    onChange={(date) => field.onChange(date)}
+                    onChange={(date) => {
+                      console.log(date);
+                      return field.onChange(date);
+                    }}
                     slotProps={{
                       textField: {
                         variant: "filled",
@@ -228,7 +232,7 @@ export const PaymentsDialog: React.FC<Props> = (props) => {
                   editable: true,
                   width: 200,
                   flex: 1,
-                  valueFormatter: (params) => dayjs(params.value).locale("es-SV").format("ddd LL"),
+                  valueFormatter: (params) => dayjs(params.value).locale("es-SV").format("LL"),
                 },
                 {
                   field: "status",

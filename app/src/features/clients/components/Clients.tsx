@@ -1,12 +1,14 @@
 import { useCallback, useState } from "react";
 import { Box, Container, IconButton, Paper, Stack, Tooltip } from "@mui/material";
 import { ClientsTable } from "./ClientsTable";
-import { PoliciesList } from "@/features/clients/components/PoliciesList";
+import { PoliciesList } from "@/features/policies/components/PoliciesList";
 import { Client } from "@/features/clients/api/Client";
-import { IconAddressBook, IconMap2, IconNotes, IconReceipt2 } from "@tabler/icons-react";
+import { IconAddressBook, IconEye, IconMap2, IconNotes, IconReceipt2 } from "@tabler/icons-react";
+import { RoutesList } from "@/features/routes/components/RoutesList";
 
 export const Clients = () => {
   const [policyDrawerOpen, setPolicyDrawerOpen] = useState(false);
+  const [routesDrawerOpen, setRoutesDrawerOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
   const handleSelectClient = useCallback((client: Client) => {
@@ -21,23 +23,41 @@ export const Clients = () => {
         overflowY: "auto",
       }}
     >
-      <Container sx={{ mt: 1.8 }} maxWidth="xl" fixed>
-        <ClientsTable onSelectClient={handleSelectClient} />
-        {selectedClient?.policy && (
-          <PoliciesList
-            open={policyDrawerOpen}
-            clientId={selectedClient.id ?? 0}
-            onClose={() => {
-              setPolicyDrawerOpen(false);
-              setSelectedClient(null);
-            }}
-          />
-        )}
-      </Container>
+      {/* Clients Table */}
+      <ClientsTable onSelectClient={handleSelectClient} />
 
+      {/* Policy Drawer */}
+      {selectedClient?.policy && (
+        <PoliciesList
+          open={policyDrawerOpen}
+          clientId={selectedClient.id ?? 0}
+          onClose={() => {
+            setPolicyDrawerOpen(false);
+            setSelectedClient(null);
+          }}
+        />
+      )}
+
+      {/* Routes Drawer */}
+      {selectedClient && (
+        <RoutesList
+          open={routesDrawerOpen}
+          onClose={() => {
+            setRoutesDrawerOpen(false);
+            setSelectedClient(null);
+          }}
+        />
+      )}
+
+      {/* Sidebar */}
       <Box sx={{ gridColumn: 2, overflowY: "hidden" }}>
         <Paper sx={{ zIndex: 1101, height: "100vh" }} elevation={3}>
           <Stack spacing={2} padding={2} alignItems={"center"}>
+            <Tooltip title={"Vista Detallada"} placement={"right"}>
+              <IconButton disabled={selectedClient == null}>
+                <IconEye />
+              </IconButton>
+            </Tooltip>
             <Tooltip title={"Polizas"} placement={"right"}>
               <IconButton
                 disabled={selectedClient == null}
@@ -49,7 +69,12 @@ export const Clients = () => {
               </IconButton>
             </Tooltip>
             <Tooltip title={"Rutas"} placement={"right"}>
-              <IconButton disabled>
+              <IconButton
+                disabled={selectedClient == null}
+                onClick={() => {
+                  setRoutesDrawerOpen(true);
+                }}
+              >
                 <IconMap2 />
               </IconButton>
             </Tooltip>

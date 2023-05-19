@@ -42,11 +42,12 @@ export const PoliciesList = ({ clientId, ...props }: Props) => {
         </Typography>
         <Tooltip title="Nueva Poliza">
           <IconButton>
-            <IconPlus />
+            <IconPlus size="1rem"/>
           </IconButton>
         </Tooltip>
       </Stack>
-      <Stack height={"100%"} width={350}>
+      
+      <Stack height={"100%"} width={"25rem"}>
         {isLoading && <CircularProgress />}
 
         {error && (

@@ -76,7 +76,11 @@ export const ClientsModalThree: React.FC = () => {
             <FilledInput
               value={policy.value}
               onChange={(e) =>
-                setPolicy({ ...policy, value: parseFloat(e.target.value.toString()) })
+                setPolicy({
+                  ...policy,
+                  value: parseFloat(e.target.value.toString()),
+                  balance: parseFloat(e.target.value.toString()),
+                })
               }
               size={"small"}
               type={"number"}
@@ -110,7 +114,7 @@ export const ClientsModalThree: React.FC = () => {
           />
         </FormControl>
 
-        {/* <TextField
+        <TextField
           value={policy.notes}
           onChange={(e) => setPolicy({ ...policy, notes: policy.notes })}
           variant="filled"
@@ -118,7 +122,7 @@ export const ClientsModalThree: React.FC = () => {
           size={"small"}
           multiline
           rows={3}
-        /> */}
+        />
       </Stack>
     </Box>
   );

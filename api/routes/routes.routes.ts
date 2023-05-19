@@ -5,7 +5,11 @@ const { route } = new PrismaClient();
 const router = Router();
 
 router.get("/", async (_req: Request, res: Response) => {
-  const data = await route.findMany();
+  const data = await route.findMany({
+    include: {
+      client: true,
+    },
+  });
   res.json(data);
 });
 

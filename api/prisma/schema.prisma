@@ -17,14 +17,14 @@ model client {
   job           String?   @db.NVarChar(255)
   incomes       Decimal?  @db.Decimal(18, 2)
   extension_day Int?
-  status        String    @db.NVarChar(255)
-  route_id      Int?
   route_index   Int?
   method        String    @db.NVarChar(255)
   phone_number  String?   @db.VarChar(20)
   email         String?   @db.NVarChar(255)
   address       String?   @db.NVarChar(Max)
-  route         route?    @relation(fields: [route_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__client__route_id__02FC7413")
+  routeId       Int?
+  status        Boolean   @default(true, map: "DF__client__status__607251E5")
+  route         route?    @relation(fields: [routeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__client__routeId__3E1D39E1")
   policy        policy[]
 }
 
@@ -88,7 +88,6 @@ model payment {
   number   String?  @db.NVarChar(50)
   date     DateTime @db.Date
   amount   Decimal  @db.Decimal(6, 2)
-  methodId Int?
   policyId Int
   status   Boolean
   policy   policy   @relation(fields: [policyId], references: [id], onUpdate: NoAction, map: "FK__payment__policyI__68487DD7")

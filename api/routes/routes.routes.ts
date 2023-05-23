@@ -26,10 +26,20 @@ router.post("/", async (req: Request, res: Response) => {
   res.json(req.body);
 });
 
+router.delete("/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const updatedData = await route.delete({
+    where: { id: parseInt(id) },
+  });
+
+  res.json(updatedData);
+});
+
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const updatedData = route.update({
+  const updatedData = await route.update({
     where: { id: parseInt(id) },
     data: { ...req.body },
   });

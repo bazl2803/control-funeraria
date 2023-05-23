@@ -48,12 +48,13 @@ export const ClientModal: React.FC<Props> = (props) => {
     created_at: new Date(),
   };
 
-  const POLICY_INITIAL_STATE: Omit<Policy, "clientId" | "id"> = {
+  const POLICY_INITIAL_STATE: Omit<Policy, "clientId"> = {
     serviceId: 0,
     balance: 0,
     value: 0,
     prime: 0,
     fee: 0,
+    notes: "",
   };
 
   const { onClose } = props;
@@ -68,9 +69,6 @@ export const ClientModal: React.FC<Props> = (props) => {
         headers: {
           "Content-Type": "application/json",
         },
-      })
-      .then((response) => {
-        console.log("Client response:", response);
       })
       .catch((error) => console.error(error))
       .finally(() => onClose && onClose());

@@ -6,19 +6,21 @@ interface Props {
   name: string;
 }
 
-export const PhoneMask = React.forwardRef<HTMLElement, Props>(function PhoneMask(props, ref) {
-  const { onChange, ...other } = props;
-  return (
-    <IMaskInput
-      {...other}
-      mask="(5\03) 0000-0000"
-      placeholder="(503) 0000-0000"
-      definitions={{
-        "#": /[1-9]/,
-      }}
-      inputRef={ref}
-      onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
-      overwrite
-    />
-  );
+export const PhoneMask = React.forwardRef<HTMLElement, Props>(
+  function PhoneMask(props, ref) {
+    const { onChange, ...other } = props;
+    return (
+      <IMaskInput
+        {...other}
+        mask="(5\03) 0000-0000"
+        placeholder="(503) 0000-0000"
+        defaultValue=""
+        definitions={{
+          "#": /[1-9]/,
+        }}
+        inputRef={ref}
+        onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
+        overwrite
+      />
+    );
 });

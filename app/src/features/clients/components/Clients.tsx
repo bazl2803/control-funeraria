@@ -20,7 +20,10 @@ export const Clients = () => {
       sx={{
         display: "grid",
         gridTemplateColumns: "1fr auto",
+        height: "100vh",
+        width: "100vw",
         overflowY: "auto",
+        overflowX: "hidden",
       }}
     >
       {/* Clients Table */}
@@ -50,43 +53,53 @@ export const Clients = () => {
       )}
 
       {/* Sidebar */}
-      <Box sx={{ gridColumn: 2, overflowY: "hidden" }}>
+      <Box sx={{ gridColumn: 2, overflowY: "hidden", position: "sticky", top: 0, right: 0 }}>
         <Paper sx={{ zIndex: 1101, height: "100vh" }} elevation={3}>
           <Stack spacing={2} padding={2} alignItems={"center"}>
             <Tooltip title={"Vista Detallada"} placement={"right"}>
-              <IconButton disabled={selectedClient == null}>
-                <IconEye />
-              </IconButton>
+              <span>
+                <IconButton disabled={selectedClient == null}>
+                  <IconEye />
+                </IconButton>
+              </span>
             </Tooltip>
             <Tooltip title={"Polizas"} placement={"right"}>
-              <IconButton
-                disabled={selectedClient == null}
-                onClick={() => {
-                  setPolicyDrawerOpen(true);
-                }}
-              >
-                <IconReceipt2 />
-              </IconButton>
+              <span>
+                <IconButton
+                  disabled={selectedClient == null}
+                  onClick={() => {
+                    setPolicyDrawerOpen(true);
+                  }}
+                >
+                  <IconReceipt2 />
+                </IconButton>
+              </span>
             </Tooltip>
             <Tooltip title={"Rutas"} placement={"right"}>
-              <IconButton
-                disabled={selectedClient == null}
-                onClick={() => {
-                  setRoutesDrawerOpen(true);
-                }}
-              >
-                <IconMap2 />
-              </IconButton>
+              <span>
+                <IconButton
+                  disabled={selectedClient == null}
+                  onClick={() => {
+                    setRoutesDrawerOpen(true);
+                  }}
+                >
+                  <IconMap2 />
+                </IconButton>
+              </span>
             </Tooltip>
             <Tooltip title={"Direcciones"} placement={"right"}>
-              <IconButton>
-                <IconAddressBook />
-              </IconButton>
+              <span>
+                <IconButton>
+                  <IconAddressBook />
+                </IconButton>
+              </span>
             </Tooltip>
             <Tooltip title={"Notas"} placement={"right"}>
-              <IconButton>
-                <IconNotes />
-              </IconButton>
+              <span>
+                <IconButton>
+                  <IconNotes />
+                </IconButton>
+              </span>
             </Tooltip>
           </Stack>
         </Paper>

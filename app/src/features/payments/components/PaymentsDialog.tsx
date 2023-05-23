@@ -147,16 +147,6 @@ export const PaymentsDialog: React.FC<Props> = (props) => {
               spacing={2}
               p={2}
             >
-              <TextField
-                label="Número"
-                variant="filled"
-                size="small"
-                fullWidth
-                {...register("number", { required: true })}
-                error={errors.number ? true : false}
-                helperText={errors.number ? "Requerido" : ""}
-              />
-
               <Controller
                 name="date"
                 rules={{ required: true }}
@@ -186,11 +176,20 @@ export const PaymentsDialog: React.FC<Props> = (props) => {
                 )}
               />
 
+              <TextField
+                label="Número"
+                variant="filled"
+                size="small"
+                fullWidth
+                {...register("number", { required: true })}
+                error={errors.number ? true : false}
+                helperText={errors.number ? "Requerido" : ""}
+              />
+
               <Controller
                 name="amount"
                 rules={{ required: true, min: 1 }}
                 control={control}
-                defaultValue={1}
                 render={({ field }) => (
                   <FormControl sx={{ width: 300 }} size="small" variant="filled">
                     <InputLabel shrink>Monto</InputLabel>

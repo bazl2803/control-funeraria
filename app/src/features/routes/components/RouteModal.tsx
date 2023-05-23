@@ -45,19 +45,19 @@ export const RouteModal: React.FC<Props> = (props) => {
 
   return (
     <Dialog scroll="paper" maxWidth="xs" fullWidth {...props}>
-      <DialogTitle>Nueva Ruta</DialogTitle>
+      <DialogTitle m={1} mt={2}>Nueva Ruta</DialogTitle>
       <DialogContent>
-        <Stack spacing={4} padding={2}>
+        <Stack spacing={4} padding={1}>
           <TextField
             value={route.name}
-            variant="standard"
+            variant="filled"
             size="small"
             label="Nombre"
             fullWidth
             onChange={(e) => setRoute({ ...route, name: e.target.value })}
           />
 
-          <FormControl variant="standard" fullWidth>
+          <FormControl variant="filled" fullWidth>
             <InputLabel id="location_label">Ubicación</InputLabel>
             <Select
               value={route.location}
@@ -78,7 +78,7 @@ export const RouteModal: React.FC<Props> = (props) => {
           <TextField
             value={route.payday}
             label="Día de Cobro"
-            variant="standard"
+            variant="filled"
             fullWidth
             type="number"
             onChange={(e) => setRoute({ ...route, payday: parseInt(e.target.value) })}
@@ -92,10 +92,12 @@ export const RouteModal: React.FC<Props> = (props) => {
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose && onClose()}>Cancel</Button>
-        <Button variant="contained" onClick={handleSubmit}>
-          Save
-        </Button>
+        <Stack direction="row" px={3} pb={2} spacing={1}>
+          <Button onClick={() => onClose && onClose()}>Cancel</Button>
+          <Button variant="contained" onClick={handleSubmit}>
+            Save
+          </Button>
+        </Stack>
       </DialogActions>
     </Dialog>
   );

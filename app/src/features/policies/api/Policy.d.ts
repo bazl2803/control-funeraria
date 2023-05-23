@@ -3,7 +3,7 @@ import { Payment } from "@/features/payments/api/payment";
 import { Service } from "@/features/services/api/Service";
 
 export interface Policy {
-  id: number;
+  id?: number;
   clientId: number;
   serviceId: number;
   funeralId?: number;

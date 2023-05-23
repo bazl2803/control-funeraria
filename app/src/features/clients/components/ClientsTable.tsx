@@ -28,7 +28,7 @@ export const ClientsTable = (props: Props) => {
 
   // axios put client function
   const editClient = async (client: Client) => {
-    const { id,...updateFields } = client;
+    const { id, ...updateFields } = client;
     delete updateFields.policy;
     delete updateFields.route;
     return await api.put(`/clients/${id}`, updateFields);
@@ -82,6 +82,7 @@ export const ClientsTable = (props: Props) => {
             border: "none",
             padding: 1,
             width: "-webkit-fill-available",
+            overflowX: "auto",
           }}
           columns={[
             {

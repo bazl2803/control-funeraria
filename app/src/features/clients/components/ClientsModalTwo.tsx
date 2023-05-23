@@ -21,13 +21,12 @@ export const ClientsModalTwo: React.FC = () => {
   React.useEffect(() => {
     const fetchRoutes = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/api/routes"); // Replace the URL with your API endpoint
+        const response = await axios.get("http://localhost:3000/api/routes");
         setRoutes(response.data);
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchRoutes();
   }, []);
 

@@ -17,18 +17,20 @@ import {
   ListItemButton,
   Avatar,
 } from "@mui/material";
-import { IconPlus } from "@tabler/icons-react";
+import { IconMapPinCog, IconPencil, IconPlus } from "@tabler/icons-react";
 import { RouteModal } from "./RouteModal";
 import { Route } from "../api/Route";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/api/axios";
 import { useState } from "react";
+import { RouteTable } from "./RouteTable";
 
 export const RoutesList: React.FC<DrawerProps> = (props) => {
   /**
    * State
    */
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState<Route | null>(null);
 
   /**
@@ -44,6 +46,7 @@ export const RoutesList: React.FC<DrawerProps> = (props) => {
    */
   function handleClose() {
     setOpen(false);
+    setOpenEdit(false);
     refetch();
   }
 
@@ -66,14 +69,23 @@ export const RoutesList: React.FC<DrawerProps> = (props) => {
             Rutas
           </Typography>
 
-          <Tooltip title="Nueva Ruta">
-            <IconButton onClick={() => setOpen(true)}>
-              <IconPlus size={"1rem"} />
-            </IconButton>
-          </Tooltip>
+          <Stack direction="row" spacing={1}>
+            <Tooltip title="Editar Rutas">
+              <IconButton onClick={() => setOpenEdit(true)}>
+                <IconMapPinCog size={"1rem"} />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Nueva Ruta">
+              <IconButton onClick={() => setOpen(true)}>
+                <IconPlus size={"1rem"} />
+              </IconButton>
+            </Tooltip>
+          </Stack>
         </Stack>
 
         <RouteModal open={open} onClose={handleClose} />
+        <RouteTable open={openEdit} onClose={handleClose} />
 
         {isLoading && <CircularProgress />}
         {error && <Typography color="red">Error</Typography>}

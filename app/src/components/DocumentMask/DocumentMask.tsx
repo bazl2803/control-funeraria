@@ -13,6 +13,7 @@ export const DocumentMask = React.forwardRef<HTMLElement, Props>(function PhoneM
       {...other}
       mask="00000000-0"
       placeholder="00000000-0"
+      defaultValue=""
       definitions={{
         "#": /[1-9]/,
       }}

@@ -23,7 +23,6 @@ export const ClientsModalThree: React.FC = () => {
     try {
       const response = await axios.get("http://localhost:3000/api/services");
       setServices(response.data as Service[]);
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -116,7 +115,7 @@ export const ClientsModalThree: React.FC = () => {
 
         <TextField
           value={policy.notes}
-          onChange={(e) => setPolicy({ ...policy, notes: policy.notes })}
+          onChange={(e) => setPolicy({ ...policy, notes: e.target.value })}
           variant="filled"
           label="Notas"
           size={"small"}

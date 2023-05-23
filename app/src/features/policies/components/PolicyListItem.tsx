@@ -4,14 +4,15 @@ import {
   LinearProgress,
   Tooltip,
   Button,
-  Collapse,
-  Paper,
   ListItemButton,
   ListItemText,
-  CircularProgress,
   Box,
   Grid,
   IconButton,
+  List,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
 } from "@mui/material";
 import { PaymentsDialog } from "@/features/payments/components/PaymentsDialog";
 import { Policy } from "@/features/policies/api/Policy";
@@ -19,30 +20,27 @@ import {
   IconPrinter,
   IconCheck,
   IconCoffin,
-  IconPaperclip,
-  IconTableOptions,
-  IconApps,
   IconCalendar,
-  IconPlus,
   IconPencil,
-  IconClockDown,
   IconClockCode,
 } from "@tabler/icons-react";
 import days from "dayjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { IconAccessibleOffFilled } from "@tabler/icons-react";
-import { IconActivity } from "@tabler/icons-react";
+import { PolicyDialog } from "./PolicyDialog";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   policyId: number;
 }
 
 export function PolicyListItem({ policyId }: Props) {
-  const [open, setOpen] = useState(false);
-  const [openDetails, setOpenDetails] = useState(false);
-  const [expanded, setExpanded] = useState(false);
   const [data, setData] = useState<Policy | null>(null);
+  const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState<string | false>(false);
+
+  const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   function fetchPolicy() {
     axios
@@ -59,19 +57,6 @@ export function PolicyListItem({ policyId }: Props) {
     return ((value - balance) * 100) / value;
   }
 
-  // Calculate Date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-
-    const day = date.getUTCDate();
-    const month = date.getUTCMonth() + 1;
-    const year = date.getUTCFullYear();
-
-    const formatedDate = `${day}/${month}/${year}`;
-
-    return formatedDate;
-  };
-
   return (
     <>
       {data && (
@@ -87,7 +72,14 @@ export function PolicyListItem({ policyId }: Props) {
             />
           )}
 
-          <ListItemButton onClick={() => setOpenDetails(!openDetails)}>
+          <PolicyDialog
+            onClose={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            open={false}
+          />
+
+          <ListItemButton>
             <Stack sx={{ width: "100%" }} spacing={1} py={1}>
               <Grid alignItems={"start"} container>
                 <Grid item xs>
@@ -104,6 +96,7 @@ export function PolicyListItem({ policyId }: Props) {
                 </Grid>
               </Grid>
 
+              {/* Progress Bar */}
               <Stack spacing={1} paddingTop={1}>
                 <LinearProgress
                   variant="determinate"
@@ -130,138 +123,142 @@ export function PolicyListItem({ policyId }: Props) {
                     Cancelación
                   </Button>
                 )}
+
+                <Button sx={{ backgroundColor: "rgba(0,0,0,0.15)" }} onClick={() => setOpen(true)}>
+                  Mostrar Pagos
+                </Button>
               </Stack>
 
-              <Collapse in={openDetails}>
-                <Box
-                  sx={{
-                    display: "grid",
-                    gridTemplateColumns: "auto 1fr",
-                    gridAutoRows: "auto",
-                    alignItems: "center",
-                    alignContent: "center",
-                    paddingY: 3,
-                    columnGap: 5,
-                    rowGap: 2,
-                  }}
+              <div>
+                <Accordion
+                  expanded={expanded === "details"}
+                  onChange={handleChange("details")}
+                  TransitionProps={{ unmountOnExit: true }}
                 >
-                  {data.service?.name && (
-                    <>
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <IconCoffin size={"1rem"} color={"GrayText"} />
-                        <Typography fontWeight={600} color={"GrayText"}>
-                          Servicio
-                        </Typography>
-                      </Stack>
-                      <div>{data.service?.name}</div>
-                    </>
-                  )}
-
-                  {data.date && (
-                    <>
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <IconCalendar size={"1rem"} color={"GrayText"} />
-                        <Typography fontWeight={600} color={"GrayText"}>
-                          Contrato{" "}
-                        </Typography>
-                      </Stack>
-                      <div>{days(new Date(data.date)).format("LL")}</div>
-                    </>
-                  )}
-
-                  {data.modality && (
-                    <>
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <IconClockCode size={"1rem"} color={"GrayText"} />
-                        <Typography fontWeight={600} color={"GrayText"}>
-                          Modalidad
-                        </Typography>
-                      </Stack>
-                      <div>{data.modality}</div>
-                    </>
-                  )}
-
-                  {data.status && (
-                    <>
-                      <Stack direction="row" alignItems="center" spacing={1}>
-                        <IconCheck size={"1rem"} color={"GrayText"} />
-                        <Typography fontWeight={600} color={"GrayText"}>
-                          Estado
-                        </Typography>
-                      </Stack>
-
-                      <div>{data.status}</div>
-                    </>
-                  )}
-                </Box>
-
-                <Stack spacing={1}>
-                  {/* Buttons */}
-                  <Button
-                    sx={{ backgroundColor: "rgba(0,0,0,0.15)" }}
-                    onClick={() => setOpen(true)}
-                  >
-                    Mostrar Pagos
-                  </Button>
-
-                  {data.funeral ? (
-                    <>
-                      <Button
-                        sx={{ backgroundColor: "rgba(0,0,0,0.15)" }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setExpanded(!expanded);
-                        }}
-                        startIcon={<IconCheck />}
-                        color="success"
-                      >
-                        Entregado
-                      </Button>
-
-                      <Collapse in={expanded}>
-                        <Paper sx={{ padding: "1rem", mb: 1 }}>
-                          <Stack spacing={0}>
-                            <Typography variant="body2">Fecha: </Typography>
-                            <Typography variant="body2" color={"GrayText"}>
-                              24/04/2020
-                            </Typography>
-
-                            <Typography variant="body2">Fallecido: </Typography>
-                            <Typography variant="body2" color={"GrayText"}>
-                              María del Carmen Torres
-                            </Typography>
-
-                            <Typography variant="body1" fontWeight={600} mt={1}>
-                              Traslado
-                            </Typography>
-                            <Typography variant="body2">Desde: </Typography>
-                            <Typography variant="body2" color={"GrayText"}>
-                              Hospital ISSS Sonsonate
-                            </Typography>
-
-                            <Typography variant="body2">Hasta: </Typography>
-                            <Typography variant="body2" color={"GrayText"}>
-                              Parque Jardín "La Generosa"
-                            </Typography>
-
-                            <Typography variant="body1" fontWeight={600} mt={1}>
+                  <AccordionSummary>Detalles</AccordionSummary>
+                  <AccordionDetails>
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 2fr",
+                        gridAutoRows: "auto",
+                        alignItems: "center",
+                        alignContent: "center",
+                        columnGap: 2,
+                        rowGap: 1,
+                      }}
+                    >
+                      {data.service?.name && (
+                        <>
+                          <Stack direction="row" alignItems="center" spacing={1}>
+                            <IconCoffin size={"1rem"} color={"GrayText"} />
+                            <Typography fontWeight={600} color={"GrayText"}>
                               Servicio
                             </Typography>
-                            <Typography variant="body2">Tipo: </Typography>
-                            <Typography variant="body2" color={"GrayText"}>
-                              Católico
+                          </Stack>
+                          <div>{data.service?.name}</div>
+                        </>
+                      )}
+
+                      {data.date && (
+                        <>
+                          <Stack direction="row" alignItems="center" spacing={1}>
+                            <IconCalendar size={"1rem"} color={"GrayText"} />
+                            <Typography fontWeight={600} color={"GrayText"}>
+                              Contrato{" "}
                             </Typography>
                           </Stack>
-                        </Paper>
-                      </Collapse>
-                    </>
-                  ) : (
-                    <Button sx={{ backgroundColor: "rgba(0,0,0,0.15)" }} color="success">
-                      Entregar Servicio
-                    </Button>
-                  )}
-                </Stack>
-              </Collapse>
+                          <div>{days(new Date(data.date)).format("LL")}</div>
+                        </>
+                      )}
+
+                      {data.modality && (
+                        <>
+                          <Stack direction="row" alignItems="center" spacing={1}>
+                            <IconClockCode size={"1rem"} color={"GrayText"} />
+                            <Typography fontWeight={600} color={"GrayText"}>
+                              Modalidad
+                            </Typography>
+                          </Stack>
+                          <div>{data.modality}</div>
+                        </>
+                      )}
+
+                      {data.status && (
+                        <>
+                          <Stack direction="row" alignItems="center" spacing={1}>
+                            <IconCheck size={"1rem"} color={"GrayText"} />
+                            <Typography fontWeight={600} color={"GrayText"}>
+                              Estado
+                            </Typography>
+                          </Stack>
+
+                          <div>{data.status}</div>
+                        </>
+                      )}
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+                {data.funeral && (
+                  <Accordion
+                    expanded={expanded === "funeral"}
+                    onChange={handleChange("funeral")}
+                    TransitionProps={{ unmountOnExit: true }}
+                  >
+                    <AccordionSummary>Funeral</AccordionSummary>
+                    <AccordionDetails>
+                      <Stack>
+                        <Typography variant="body2">Fecha: </Typography>
+                        <Typography variant="body2" color={"GrayText"}>
+                          24/04/2020
+                        </Typography>
+
+                        <Typography variant="body2">Fallecido: </Typography>
+                        <Typography variant="body2" color={"GrayText"}>
+                          María del Carmen Torres
+                        </Typography>
+
+                        <Typography variant="body1" fontWeight={600} mt={1}>
+                          Traslado
+                        </Typography>
+                        <Typography variant="body2">Desde: </Typography>
+                        <Typography variant="body2" color={"GrayText"}>
+                          Hospital ISSS Sonsonate
+                        </Typography>
+
+                        <Typography variant="body2">Hasta: </Typography>
+                        <Typography variant="body2" color={"GrayText"}>
+                          Parque Jardín "La Generosa"
+                        </Typography>
+
+                        <Typography variant="body1" fontWeight={600} mt={1}>
+                          Servicio
+                        </Typography>
+                        <Typography variant="body2">Tipo: </Typography>
+                        <Typography variant="body2" color={"GrayText"}>
+                          Católico
+                        </Typography>
+                      </Stack>
+                    </AccordionDetails>
+                  </Accordion>
+                )}
+                {data.notes && (
+                  <Accordion
+                    expanded={expanded === "notes"}
+                    onChange={handleChange("notes")}
+                    TransitionProps={{ unmountOnExit: true }}
+                  >
+                    <AccordionSummary>Notas</AccordionSummary>
+                    <AccordionDetails>
+                      <List>
+                        <ListItemButton>
+                          <ListItemText primary={data.notes} />
+                        </ListItemButton>
+                      </List>
+                    </AccordionDetails>
+                  </Accordion>
+                )}
+              </div>
             </Stack>
           </ListItemButton>
         </>

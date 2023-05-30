@@ -20,8 +20,8 @@ export const PolicyPage = () => {
   const { id } = useParams();
 
   return (
-    <Container sx={{ py: 1 }} maxWidth="md">
-      <Stack spacing={4} justifyContent={"stretch"}>
+    <Container sx={{ my: 4 }} maxWidth="md">
+      <Stack spacing={3} justifyContent={"stretch"}>
         <Typography variant="h4" fontWeight={600}>
           {`#${id?.toString().padStart(8, "0")}`}
         </Typography>
@@ -79,7 +79,9 @@ export const PolicyPage = () => {
                       </TableCell>
                       <TableCell>(000) 0000-0000</TableCell>
                     </TableRow>
-                    <TableRow>
+                    <TableRow
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
                       <TableCell>
                         <Typography color={"text.secondary"}>
                           Dirección:
@@ -133,7 +135,9 @@ export const PolicyPage = () => {
                       </TableCell>
                       <TableCell>$7.00/mensuales</TableCell>
                     </TableRow>
-                    <TableRow>
+                    <TableRow
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
                       <TableCell>
                         <Typography color={"text.secondary"}>Saldo:</Typography>
                       </TableCell>

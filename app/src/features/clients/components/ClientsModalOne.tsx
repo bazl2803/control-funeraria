@@ -47,7 +47,7 @@ export const ClientsModalOne: React.FC = () => {
               name="doc_id"
               size="small"
               id="DUI"
-              // inputComponent={DocumentMask as any}
+              inputComponent={DocumentMask as any}
             />
           </FormControl>
         </Stack>

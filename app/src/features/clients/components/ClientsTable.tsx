@@ -68,11 +68,11 @@ export const ClientsTable = (props: Props) => {
         }}
       />
 
-      <Tooltip title="Nuevo Cliente">
+      {/* <Tooltip title="Nuevo Cliente">
         <Fab sx={{ position: "fixed", bottom: 8, right: 8 }} onClick={() => setOpen(true)}>
           <IconPlus />
         </Fab>
-      </Tooltip>
+      </Tooltip> */}
 
       {error && <Typography color={"red"}>Error</Typography>}
 
@@ -83,6 +83,7 @@ export const ClientsTable = (props: Props) => {
             padding: 1,
             width: "-webkit-fill-available",
             overflowX: "auto",
+            bgcolor: "#f5f6f7"
           }}
           columns={[
             {
@@ -128,17 +129,17 @@ export const ClientsTable = (props: Props) => {
             },
             {
               field: "policy",
-              headerName: "Contrato",
-              type: "date",
+              headerName: "Saldo",
+              type: "number",
               editable: false,
               width: 100,
               valueGetter(params) {
                 const row = params.row as Client;
                 if (row) {
-                  return row.policy?.slice(0, 1)[0].date ?? "";
+                  return row.policy?.slice(0, 1)[0].balance ?? "";
                 }
               },
-              valueFormatter: (params) => dayjs(params.value).locale("es-SV").format("L"),
+              valueFormatter: (params) => "$" + params.value.toFixed(2),
             },
             {
               field: "actions",

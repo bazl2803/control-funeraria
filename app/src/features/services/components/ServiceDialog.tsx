@@ -21,7 +21,7 @@ interface Props extends DialogProps {
 }
 
 export const ServiceDialog: React.FC<Props> = (props) => {
-  const [service, setService] = useState<Service>({
+  const [service, setService] = useState({
     name: "",
     price: 0,
     prime: 0,
@@ -60,7 +60,7 @@ export const ServiceDialog: React.FC<Props> = (props) => {
                 value={service.price}
                 size={"small"}
                 type={"number"}
-                inputProps={{min: 1}}
+                inputProps={{ min: 1 }}
                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                 onChange={(e) => setService({ ...service, price: parseFloat(e.target.value) })}
               />
@@ -72,7 +72,7 @@ export const ServiceDialog: React.FC<Props> = (props) => {
                 value={service.prime}
                 size={"small"}
                 type={"number"}
-                inputProps={{min: 1}}
+                inputProps={{ min: 1 }}
                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                 onChange={(e) => setService({ ...service, prime: parseFloat(e.target.value) })}
               />
@@ -84,7 +84,7 @@ export const ServiceDialog: React.FC<Props> = (props) => {
                 value={service.fee}
                 size={"small"}
                 type={"number"}
-                inputProps={{min: 1}}
+                inputProps={{ min: 1 }}
                 startAdornment={<InputAdornment position="start">$</InputAdornment>}
                 endAdornment={<InputAdornment position="start">/mensuales</InputAdornment>}
                 onChange={(e) => setService({ ...service, fee: parseFloat(e.target.value) })}

@@ -12,11 +12,11 @@ export const PhoneMask = React.forwardRef<HTMLElement, Props>(
     return (
       <IMaskInput
         {...other}
-        mask="(5\03) 0000-0000"
+        mask="(###) 0000-0000"
         placeholder="(503) 0000-0000"
-        defaultValue=""
+        defaultValue="(503)"
         definitions={{
-          "#": /[1-9]/,
+          "#": /[0-9]/,
         }}
         inputRef={ref}
         onAccept={(value: any) => onChange({ target: { name: props.name, value } })}

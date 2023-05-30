@@ -1,24 +1,46 @@
 import { useCallback, useState } from "react";
-import { Box, Container, IconButton, Paper, Stack, Tooltip } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { ClientsTable } from "./ClientsTable";
 import { PoliciesList } from "@/features/policies/components/PoliciesList";
 import { Client } from "@/features/clients/api/Client";
-import { IconAddressBook, IconEye, IconMap2, IconNotes, IconReceipt2 } from "@tabler/icons-react";
+import {
+  IconAddressBook,
+  IconArrowLeft,
+  IconEye,
+  IconMap2,
+  IconNotes,
+  IconReceipt2,
+  IconSquareArrowLeft,
+} from "@tabler/icons-react";
 import { RoutesList } from "@/features/routes/components/RoutesList";
+import ClientPolicies from "./ClientPolicies";
+import ClientNotes from "./ClientNotes";
 
 export const Clients = () => {
   const [policyDrawerOpen, setPolicyDrawerOpen] = useState(false);
   const [routesDrawerOpen, setRoutesDrawerOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleSelectClient = useCallback((client: Client) => {
     setSelectedClient(client);
   }, []);
 
+  const open = Boolean(anchorEl);
+
   return (
     <Box
       sx={{
         display: "grid",
+        gridTemplateRows: "auto  1fr",
         gridTemplateColumns: "1fr auto",
         height: "100vh",
         width: "100vw",
@@ -26,14 +48,45 @@ export const Clients = () => {
         overflowX: "hidden",
       }}
     >
+      <Stack
+        sx={{ zIndex: 1 }}
+        gridColumn={"span 2"}
+        component={Paper}
+        elevation={2}
+        spacing={1}
+        py={2}
+        px={3}
+      >
+        <Stack
+          justifyContent={"end"}
+          alignItems={"center"}
+          direction={"row"}
+          spacing={1}
+        >
+          <Stack direction={"row"} spacing={2} flex={1}>
+            <IconButton>
+              <IconArrowLeft />
+            </IconButton>
+            <Typography variant="h4" fontWeight={600}>
+              Clientes
+            </Typography>
+          </Stack>
+
+          <Stack direction={"row"} spacing={1}>
+            <ClientPolicies policies={selectedClient?.policy} />
+            <ClientNotes policies={selectedClient?.policy} />
+          </Stack>
+        </Stack>
+      </Stack>
+
       {/* Clients Table */}
       <ClientsTable onSelectClient={handleSelectClient} />
 
       {/* Policy Drawer */}
       {selectedClient?.policy && (
         <PoliciesList
-          open={policyDrawerOpen}
           clientId={selectedClient.id ?? 0}
+          open={policyDrawerOpen}
           onClose={() => {
             setPolicyDrawerOpen(false);
             setSelectedClient(null);
@@ -51,59 +104,6 @@ export const Clients = () => {
           }}
         />
       )}
-
-      {/* Sidebar */}
-      <Box sx={{ gridColumn: 2, overflowY: "hidden", position: "sticky", top: 0, right: 0 }}>
-        <Paper sx={{ zIndex: 1101, height: "100vh" }} elevation={3}>
-          <Stack spacing={2} padding={2} alignItems={"center"}>
-            <Tooltip title={"Vista Detallada"} placement={"right"}>
-              <span>
-                <IconButton disabled={selectedClient == null}>
-                  <IconEye />
-                </IconButton>
-              </span>
-            </Tooltip>
-            <Tooltip title={"Polizas"} placement={"right"}>
-              <span>
-                <IconButton
-                  disabled={selectedClient == null}
-                  onClick={() => {
-                    setPolicyDrawerOpen(true);
-                  }}
-                >
-                  <IconReceipt2 />
-                </IconButton>
-              </span>
-            </Tooltip>
-            <Tooltip title={"Rutas"} placement={"right"}>
-              <span>
-                <IconButton
-                  disabled={selectedClient == null}
-                  onClick={() => {
-                    setRoutesDrawerOpen(true);
-                  }}
-                >
-                  <IconMap2 />
-                </IconButton>
-              </span>
-            </Tooltip>
-            <Tooltip title={"Direcciones"} placement={"right"}>
-              <span>
-                <IconButton>
-                  <IconAddressBook />
-                </IconButton>
-              </span>
-            </Tooltip>
-            <Tooltip title={"Notas"} placement={"right"}>
-              <span>
-                <IconButton>
-                  <IconNotes />
-                </IconButton>
-              </span>
-            </Tooltip>
-          </Stack>
-        </Paper>
-      </Box>
     </Box>
   );
 };

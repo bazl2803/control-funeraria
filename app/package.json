@@ -1,10 +1,9 @@
 {
-  "name": "control-funeraria",
-  "version": "2.2.1",
+  "name": "funebre",
+  "version": "3.0.0",
   "main": "dist-electron/main/index.js",
-  "build": "Funebre",
   "description": "Gestor de Clientes, Servicios y Polizas de Funararia",
-  "author": "草鞋没号 <308487730@qq.com>",
+  "author": "Bryan Lemus",
   "license": "MIT",
   "private": true,
   "debug": {

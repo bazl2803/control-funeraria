@@ -1,5 +1,4 @@
-export * from "./Policies";
-export * from "./PoliciesTable";
+export * from "./PolicyPage";
 export * from "./PolicyDialog";
-export * from "./PolicyPayments";
-
+export * from "./PoliciesList";
+export * from "./PolicyListItem";

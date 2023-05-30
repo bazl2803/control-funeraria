@@ -7,7 +7,11 @@ const router = Router();
 router.get("/", async (req: Request, res: Response) => {
   const data = await client.findMany({
     include: {
-      policy: true,
+      policy: {
+        include: {
+          service: true,
+        },
+      },
       route: true,
     },
   });
@@ -27,7 +31,11 @@ router.post("/", async (req: Request, res: Response) => {
   const newData = await client.create({
     data: { ...req.body },
     include: {
-      policy: true,
+      policy: {
+        include: {
+          service: true,
+        },
+      },
     },
   });
 

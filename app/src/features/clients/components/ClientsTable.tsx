@@ -5,7 +5,7 @@ import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { Fab, Tooltip, Typography } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridRowModel } from "@mui/x-data-grid";
 import dayjs from "dayjs";
-import { ClientModal } from "./ClientModal";
+import { ClientModal } from "./ClientDialog/ClientModal";
 import { Client } from "../api/Client";
 import { api } from "@/api/axios";
 import { Policy } from "@/features/policies/api/Policy";
@@ -22,8 +22,9 @@ export const ClientsTable = (props: Props) => {
    */
   const queryClient = new QueryClient();
 
-  const { data, error, isLoading, refetch } = useQuery<Client[], Error>(["clients"], () =>
-    api.get("/clients").then((res) => res.data)
+  const { data, error, isLoading, refetch } = useQuery<Client[], Error>(
+    ["clients"],
+    () => api.get("/clients").then((res) => res.data)
   );
 
   // axios put client function
@@ -68,12 +69,6 @@ export const ClientsTable = (props: Props) => {
         }}
       />
 
-      {/* <Tooltip title="Nuevo Cliente">
-        <Fab sx={{ position: "fixed", bottom: 8, right: 8 }} onClick={() => setOpen(true)}>
-          <IconPlus />
-        </Fab>
-      </Tooltip> */}
-
       {error && <Typography color={"red"}>Error</Typography>}
 
       {data && (
@@ -81,9 +76,10 @@ export const ClientsTable = (props: Props) => {
           sx={{
             border: "none",
             padding: 1,
+            paddingTop: 3,
             width: "-webkit-fill-available",
             overflowX: "auto",
-            bgcolor: "#f5f6f7"
+            bgcolor: "#f5f6f7",
           }}
           columns={[
             {
@@ -162,6 +158,7 @@ export const ClientsTable = (props: Props) => {
           ]}
           rows={data}
           loading={isLoading}
+          key={"id"}
           onRowClick={(params) => handleSelectClient(params.row)}
           processRowUpdate={processRowUpdate}
           autoPageSize

@@ -11,7 +11,9 @@ import {
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
-export const Layout: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
+export const Layout: React.FC<React.HTMLAttributes<HTMLDivElement>> = (
+  props
+) => {
   const navigate = useNavigate();
   return (
     <Box
@@ -24,7 +26,7 @@ export const Layout: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
         },
       }}
     >
-      <Box sx={{ gridColumn: 1, overflowY: "auto" }}>{props.children}</Box>
+      {props.children}
     </Box>
   );
 };

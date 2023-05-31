@@ -12,11 +12,10 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
-import { Client } from "../api/Client";
+import { Client } from "../../api/Client";
 import { ClientsModalOne } from "./ClientsModalOne";
 import { ClientsModalTwo } from "./ClientsModalTwo";
 import { ClientsModalThree } from "./ClientsModalThree";
-import { ClientsModalFour } from "./ClientsModalFour";
 import { Policy } from "@/features/policies/api/Policy";
 
 interface Props extends DialogProps {

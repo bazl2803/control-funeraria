@@ -19,8 +19,13 @@ export const PhoneMask = React.forwardRef<HTMLElement, Props>(
           "#": /[0-9]/,
         }}
         inputRef={ref}
-        onAccept={(value: any) => onChange({ target: { name: props.name, value } })}
+        onChange={(value) => {
+          target: {
+            name: props.name, value;
+          }
+        }}
         overwrite
       />
     );
-});
+  }
+);

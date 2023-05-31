@@ -9,9 +9,9 @@ type Props = {
 export const PresentationLabel = (props: Props) => {
   return (
     <Stack
-      direction={props.direction ?? "row"}
-      spacing={4}
+      direction={props.direction ?? "column"}
       alignItems={"start"}
+      justifyContent={"start"}
     >
       <Typography color={"text.secondary"}>
         {props.primary}

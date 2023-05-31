@@ -43,13 +43,15 @@ export default function ClientPolicies(props: Props) {
   return (
     <div>
       <Tooltip title="Contratos">
-        <IconButton
-          aria-describedby={id}
-          onClick={handleClick}
-          disabled={props.policies ? false : true}
-        >
-          <IconLicense />
-        </IconButton>
+        <span>
+          <IconButton
+            aria-describedby={id}
+            onClick={handleClick}
+            disabled={props.policies ? false : true}
+          >
+            <IconLicense />
+          </IconButton>
+        </span>
       </Tooltip>
       <Popover
         id={id}

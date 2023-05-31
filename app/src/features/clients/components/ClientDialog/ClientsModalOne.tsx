@@ -22,7 +22,11 @@ export const ClientsModalOne: React.FC = () => {
   return (
     <Box>
       <Stack spacing={4} padding={2}>
-        <Stack direction={"row"} alignItems={"end"} justifyContent={"space-between"}>
+        <Stack
+          direction={"row"}
+          alignItems={"end"}
+          justifyContent={"space-between"}
+        >
           <FormControl size="small" fullWidth>
             <FormLabel id="type_radio_group">Tipo de Cliente</FormLabel>
             <RadioGroup
@@ -32,9 +36,17 @@ export const ClientsModalOne: React.FC = () => {
               name="radio-buttons-group"
             >
               <Stack direction={"row"}>
-                <FormControlLabel value="Persona" control={<Radio />} label="Persona" />
+                <FormControlLabel
+                  value="Persona"
+                  control={<Radio />}
+                  label="Persona"
+                />
 
-                <FormControlLabel value="Empresa" control={<Radio />} label="Empresa" />
+                <FormControlLabel
+                  value="Empresa"
+                  control={<Radio />}
+                  label="Empresa"
+                />
               </Stack>
             </RadioGroup>
           </FormControl>
@@ -64,7 +76,9 @@ export const ClientsModalOne: React.FC = () => {
           <InputLabel htmlFor="formatted-text-mask-input">Teléfono</InputLabel>
           <FilledInput
             value={client.phone_number}
-            onChange={(e) => setClient({ ...client, phone_number: e.target.value })}
+            onChange={(e) =>
+              setClient({ ...client, phone_number: e.target.value })
+            }
             name="phone_number"
             type="tel"
             size="small"

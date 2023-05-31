@@ -6,20 +6,13 @@ import {
   Alert,
   Badge,
   IconButton,
-  LinearProgress,
-  List,
-  ListItemButton,
-  ListItemText,
   Paper,
   Stack,
   Tooltip,
 } from "@mui/material";
 import {
-  IconLicense,
   IconMessage,
   IconMessagePlus,
-  IconNotes,
-  IconTextPlus,
 } from "@tabler/icons-react";
 import { Policy } from "@/features/policies/api/Policy";
 
@@ -27,9 +20,6 @@ interface Props {
   policies?: Policy[];
 }
 
-function progressValue(value: number, balance: number) {
-  return ((value - balance) * 100) / value;
-}
 
 export default function ClientNotes(props: Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -76,10 +66,9 @@ export default function ClientNotes(props: Props) {
           </Typography>
           <Stack spacing={1}>
             {props.policies?.map((policy) => {
-              console.log(policy.notes);
-              if (policy.notes != null)
+              if (policy.notes ? true : false)
                 return (
-                  <Paper sx={{ bgcolor: "lightyellow", p: 2 }} key={policy.id}>
+                  <Paper key={policy.id} sx={{ bgcolor: "lightyellow", p: 2 }}>
                     {policy.notes}
                   </Paper>
                 );

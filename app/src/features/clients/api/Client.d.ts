@@ -21,4 +21,5 @@ export interface Client {
   address?: string;
   policy?: Policy[];
   route?: Route;
+  notes?: [];
 }

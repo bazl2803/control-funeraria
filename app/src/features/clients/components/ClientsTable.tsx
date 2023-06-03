@@ -5,13 +5,13 @@ import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { Fab, Tooltip, Typography } from "@mui/material";
 import { DataGrid, GridActionsCellItem, GridRowModel } from "@mui/x-data-grid";
 import dayjs from "dayjs";
-import { ClientModal } from "./ClientDialog/ClientModal";
 import { Client } from "../api/Client";
 import { api } from "@/api/axios";
 import { Policy } from "@/features/policies/api/Policy";
 
 interface Props {
   onSelectClient: (client: Client) => void;
+  clients: Client[];
 }
 
 export const ClientsTable = (props: Props) => {
@@ -22,9 +22,8 @@ export const ClientsTable = (props: Props) => {
    */
   const queryClient = new QueryClient();
 
-  const { data, error, isLoading, refetch } = useQuery<Client[], Error>(
-    ["clients"],
-    () => api.get("/clients").then((res) => res.data)
+  const { refetch } = useQuery<Client[], Error>(["clients"], () =>
+    api.get("/clients").then((res) => res.data)
   );
 
   // axios put client function
@@ -61,17 +60,7 @@ export const ClientsTable = (props: Props) => {
 
   return (
     <>
-      <ClientModal
-        open={open}
-        onClose={() => {
-          setOpen(false);
-          refetch();
-        }}
-      />
-
-      {error && <Typography color={"red"}>Error</Typography>}
-
-      {data && (
+      {props.clients && (
         <DataGrid
           sx={{
             border: "none",
@@ -156,8 +145,7 @@ export const ClientsTable = (props: Props) => {
               ],
             },
           ]}
-          rows={data}
-          loading={isLoading}
+          rows={props.clients}
           key={"id"}
           onRowClick={(params) => handleSelectClient(params.row)}
           processRowUpdate={processRowUpdate}

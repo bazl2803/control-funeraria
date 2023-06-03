@@ -2,24 +2,13 @@ import * as React from "react";
 import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {
-  Alert,
-  Badge,
-  IconButton,
-  Paper,
-  Stack,
-  Tooltip,
-} from "@mui/material";
-import {
-  IconMessage,
-  IconMessagePlus,
-} from "@tabler/icons-react";
-import { Policy } from "@/features/policies/api/Policy";
+import { Badge, IconButton, Paper, Stack, Tooltip } from "@mui/material";
+import { IconMessage, IconMessagePlus } from "@tabler/icons-react";
+import { Note } from "@/features/notes/api/Note";
 
 interface Props {
-  policies?: Policy[];
+  notes?: Note[];
 }
-
 
 export default function ClientNotes(props: Props) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
@@ -40,11 +29,11 @@ export default function ClientNotes(props: Props) {
   return (
     <div>
       <Tooltip title="Notas">
-        <Badge badgeContent={props.policies != null && 1} color="primary">
+        <Badge badgeContent={props.notes?.length} color="primary">
           <IconButton
             aria-describedby={id}
             onClick={handleClick}
-            disabled={props.policies ? false : true}
+            disabled={props.notes ? false : true}
           >
             <IconMessage />
           </IconButton>
@@ -65,17 +54,9 @@ export default function ClientNotes(props: Props) {
             Notas
           </Typography>
           <Stack spacing={1}>
-            {props.policies?.map((policy) => {
-              if (policy.notes ? true : false)
-                return (
-                  <Paper key={policy.id} sx={{ bgcolor: "lightyellow", p: 2 }}>
-                    {policy.notes}
-                  </Paper>
-                );
-              else {
-                return <Alert severity="warning">No hay notas</Alert>;
-              }
-            })}
+            {props.notes?.map((note) => (
+              <Paper sx={{ bgcolor: "lightyellow" }}>{note.text}</Paper>
+            ))}
           </Stack>
           <Button sx={{ mx: 1, mb: 1 }} startIcon={<IconMessagePlus />}>
             Agregar Nota

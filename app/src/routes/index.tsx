@@ -2,8 +2,9 @@ import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./protected";
 import { Landing } from "@/features/misc";
 import { Login } from "@/features/auth/components/Login";
-import { Clients as ClientsPage } from "@/features/clients";
+import { ClientsPage } from "@/features/clients";
 import { PolicyPage } from "@/features/policies";
+import { CreateClientForm } from "@/features/clients/components/ClientForm";
 
 export const AppRoutes = () => (
   <Routes>
@@ -14,6 +15,14 @@ export const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <ClientsPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/clients/new"
+      element={
+        <ProtectedRoute>
+          <CreateClientForm />
         </ProtectedRoute>
       }
     />

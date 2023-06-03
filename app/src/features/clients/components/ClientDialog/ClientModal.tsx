@@ -25,11 +25,15 @@ interface Props extends DialogProps {
 interface ClientContextState {
   client: Client;
   setClient: React.Dispatch<React.SetStateAction<Client>>;
-  policy: Omit<Policy, "clientId">;
-  setPolicy: React.Dispatch<React.SetStateAction<Omit<Policy, "clientId">>>;
+  policy: Omit<Policy, "clientId" | "client">;
+  setPolicy: React.Dispatch<
+    React.SetStateAction<Omit<Policy, "clientId" | "client">>
+  >;
 }
 
-export const ClientContext = React.createContext<ClientContextState>({} as ClientContextState);
+export const ClientContext = React.createContext<ClientContextState>(
+  {} as ClientContextState
+);
 
 export const ClientModal: React.FC<Props> = (props) => {
   const CLIENT_INITIAL_STATE: Client = {
@@ -47,7 +51,7 @@ export const ClientModal: React.FC<Props> = (props) => {
     created_at: new Date(),
   };
 
-  const POLICY_INITIAL_STATE: Omit<Policy, "clientId"> = {
+  const POLICY_INITIAL_STATE: Omit<Policy, "clientId" | "client"> = {
     serviceId: 0,
     balance: 0,
     value: 0,
@@ -63,14 +67,16 @@ export const ClientModal: React.FC<Props> = (props) => {
 
   const handleSubmit = () => {
     const data = { ...client, policy: { create: { ...policy } } };
-    axios
-      .post("http://localhost:3000/api/clients", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .catch((error) => console.error(error))
-      .finally(() => onClose && onClose());
+    console.log(data);
+    
+    // axios
+    //   .post("http://localhost:3000/api/clients", data, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   })
+    //   .catch((error) => console.error(error))
+    //   .finally(() => onClose && onClose());
   };
 
   const handleClose = () => {
@@ -88,7 +94,10 @@ export const ClientModal: React.FC<Props> = (props) => {
     <Dialog scroll="body" maxWidth="sm" fullWidth {...props}>
       <DialogTitle mt={"1rem"}>Nuevo Cliente</DialogTitle>
       <DialogContent sx={{ padding: "1rem" }}>
-        <Stepper sx={{ margin: "1rem 0rem 1rem 0.5rem" }} activeStep={activeStep}>
+        <Stepper
+          sx={{ margin: "1rem 0rem 1rem 0.5rem" }}
+          activeStep={activeStep}
+        >
           {steps.map((step, index) => {
             return (
               <Step key={index}>
@@ -98,19 +107,32 @@ export const ClientModal: React.FC<Props> = (props) => {
           })}
         </Stepper>
 
-        <ClientContext.Provider value={{ client, setClient, policy, setPolicy }}>
+        <ClientContext.Provider
+          value={{ client, setClient, policy, setPolicy }}
+        >
           {activeStep === 0 && <ClientsModalOne />}
           {activeStep === 1 && <ClientsModalTwo />}
           {activeStep === 2 && <ClientsModalThree />}
         </ClientContext.Provider>
       </DialogContent>
       <DialogActions sx={{ margin: "1.5rem" }}>
-        <Stack direction={"row"} justifyContent={"space-between"} spacing={2} width={"100%"}>
+        <Stack
+          direction={"row"}
+          justifyContent={"space-between"}
+          spacing={2}
+          width={"100%"}
+        >
           <Button onClick={() => handleClose()}>Cancelar</Button>
           <Stack direction={"row"} justifyContent={"space-between"} spacing={2}>
-            {activeStep > 0 && <Button onClick={() => setActiveStep(activeStep - 1)}>Atrás</Button>}
+            {activeStep > 0 && (
+              <Button onClick={() => setActiveStep(activeStep - 1)}>
+                Atrás
+              </Button>
+            )}
             {activeStep + 1 < steps.length && (
-              <Button onClick={() => setActiveStep(activeStep + 1)}>Siguiente</Button>
+              <Button onClick={() => setActiveStep(activeStep + 1)}>
+                Siguiente
+              </Button>
             )}
             {activeStep + 1 === steps.length && (
               <Button

@@ -10,8 +10,14 @@ import {
   TableCell,
   Chip,
 } from "@mui/material";
+import { Policy } from "../api/Policy";
+import days from "dayjs";
 
-export const PolicyPageDetails = () => {
+interface Props {
+  policy: Policy;
+}
+
+export const PolicyPageDetails = (props: Props) => {
   return (
     <Box
       sx={{
@@ -38,26 +44,36 @@ export const PolicyPageDetails = () => {
                   <Typography color={"text.secondary"}>Estado:</Typography>
                 </TableCell>
                 <TableCell>
-                  <Chip label="Inactivo" color="error" variant="outlined" />
+                  <Chip
+                    label={props.policy.client.status ? "Activo" : "Inactivo"}
+                    color={props.policy.client.status ? "success" : "error"}
+                    variant="outlined"
+                  />
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
                   <Typography color={"text.secondary"}>Nombre:</Typography>
                 </TableCell>
-                <TableCell>Nombre del Cliente</TableCell>
+                <TableCell>{props.policy.client.name}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
                   <Typography color={"text.secondary"}>DUI:</Typography>
                 </TableCell>
-                <TableCell>00000000-0</TableCell>
+                <TableCell>{props.policy.client.doc_id}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
-                  <Typography color={"text.secondary"}>Teléfono</Typography>
+                  <Typography color={"text.secondary"}>Teléfono:</Typography>
                 </TableCell>
-                <TableCell>(000) 0000-0000</TableCell>
+                <TableCell>{props.policy.client.phone_number}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Typography color={"text.secondary"}>Correo:</Typography>
+                </TableCell>
+                <TableCell>{props.policy.client.email}</TableCell>
               </TableRow>
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -65,10 +81,7 @@ export const PolicyPageDetails = () => {
                 <TableCell>
                   <Typography color={"text.secondary"}>Dirección:</Typography>
                 </TableCell>
-                <TableCell>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aliquam sit.
-                </TableCell>
+                <TableCell>{props.policy.client.address}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -89,25 +102,27 @@ export const PolicyPageDetails = () => {
                     Fecha del Contrato:
                   </Typography>
                 </TableCell>
-                <TableCell>DD/MM/YYYY</TableCell>
+                <TableCell>
+                  {days(props.policy.date as Date).format("DD/MM/YYYY")}
+                </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
                   <Typography color={"text.secondary"}>Servicio:</Typography>
                 </TableCell>
-                <TableCell>Duqueza</TableCell>
+                <TableCell>{props.policy.service?.name}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
                   <Typography color={"text.secondary"}>Valor:</Typography>
                 </TableCell>
-                <TableCell>$600.00</TableCell>
+                <TableCell>${props.policy.value.toFixed(2)}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>
                   <Typography color={"text.secondary"}>Cuota</Typography>
                 </TableCell>
-                <TableCell>$7.00/mensuales</TableCell>
+                <TableCell>${props.policy.fee.toFixed(2)}/mensuales</TableCell>
               </TableRow>
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -116,11 +131,14 @@ export const PolicyPageDetails = () => {
                   <Typography color={"text.secondary"}>Saldo:</Typography>
                 </TableCell>
                 <TableCell>
-                  <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                    <Typography>$0.00</Typography>
+                  <Stack direction={"row"} alignItems={"center"}>
+                    ${props.policy.balance.toFixed(2)}
                     <Chip
-                      label="Cancelado"
-                      color="success"
+                      sx={{ ml: 1 }}
+                      label={
+                        props.policy.balance === 0 ? "Cancelado" : "En pago"
+                      }
+                      color={props.policy.balance === 0 ? "success" : "warning"}
                       variant="outlined"
                     />
                   </Stack>

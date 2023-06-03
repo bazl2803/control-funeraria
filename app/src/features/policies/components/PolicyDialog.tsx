@@ -24,6 +24,9 @@ import { useForm } from "react-hook-form";
 interface Props extends DialogProps {
   onClose: () => void;
   client_id?: number;
+
+
+  
   policy_id?: number;
 }
 

@@ -1,3 +1,4 @@
+import { Client } from "@/features/clients/api/Client";
 import { Funeral } from "@/features/funerals/api/Funeral";
 import { Payment } from "@/features/payments/api/payment";
 import { Service } from "@/features/services/api/Service";
@@ -18,4 +19,5 @@ export interface Policy {
   payment?: Payment[];
   service?: Service;
   funeral?: Funeral;
+  client: Client;
 }

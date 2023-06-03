@@ -15,7 +15,7 @@ router.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   const data = await policy.findUnique({
     where: { id: parseInt(id) },
-    include: { payment: true, funeral: true, service: true },
+    include: { payment: true, funeral: true, service: true, client: true },
   });
   res.json(data);
 });

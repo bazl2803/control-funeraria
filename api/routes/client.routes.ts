@@ -30,13 +30,6 @@ router.get("/:id", async (req: Request, res: Response) => {
 router.post("/", async (req: Request, res: Response) => {
   const newData = await client.create({
     data: { ...req.body },
-    include: {
-      policy: {
-        include: {
-          service: true,
-        },
-      },
-    },
   });
 
   res.json(newData);

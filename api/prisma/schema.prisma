@@ -25,6 +25,7 @@ model client {
   routeId       Int?
   status        Boolean   @default(true, map: "DF__client__status__607251E5")
   route         route?    @relation(fields: [routeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK__client__routeId__3E1D39E1")
+  notes         notes[]
   policy        policy[]
 }
 
@@ -108,7 +109,7 @@ model policy {
   balance                          Float     @db.SmallMoney
   date                             DateTime? @db.Date
   prime                            Float     @db.SmallMoney
-  notes                            String?   @db.NVarChar(Max)
+  notes                            String?   @db.NVarChar(255)
   status                           String?   @db.NVarChar(10)
   modality                         String?   @db.NVarChar(10)
   value                            Float     @db.SmallMoney
@@ -165,4 +166,11 @@ model sysdiagrams {
   definition   Bytes?
 
   @@unique([principal_id, name], map: "UK_principal_name")
+}
+
+model notes {
+  id       Int    @id(map: "PK__notes__3213E83FEDAE0A93") @default(autoincrement())
+  text     String @db.NVarChar(255)
+  clientId Int
+  client   client @relation(fields: [clientId], references: [id], onUpdate: NoAction, map: "FK__notes__clientId__756D6ECB")
 }
